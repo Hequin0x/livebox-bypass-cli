@@ -1,5 +1,5 @@
 ---
-name: Gradle Package
+name: Build and Release
 
 on:
   push:

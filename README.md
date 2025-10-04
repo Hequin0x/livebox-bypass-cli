@@ -1,5 +1,6 @@
 # Livebox Bypass CLI
 
+![GitHub License](https://img.shields.io/github/license/Hequin0x/livebox-bypass-cli)
 ![GitHub Release](https://img.shields.io/github/v/release/Hequin0x/livebox-bypass-cli)
 
 ## Table of contents
