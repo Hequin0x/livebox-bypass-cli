@@ -3,10 +3,11 @@ name: Build and Release
 
 on:
   push:
-    tags: ['v*.*.*']
+    tags: ['*.*.*']
 
 env:
-  OUTPUT_NAME: livebox-bypass-cli
+  OUTPUT_FILE_NAME: livebox-bypass-cli
+  OUTPUT_RELEASE_NAME: Livebox Bypass CLI
 
 permissions: {}
 
@@ -41,13 +42,13 @@ jobs:
         run: ./gradlew --configuration-cache build -Dquarkus.package.jar.enabled=true -Dquarkus.package.jar.type=uber-jar
 
       - name: Move Artifact (JAR)
-        run: mv build/*-runner* staging/${{ env.OUTPUT_NAME }}-${{ github.ref_name }}.jar
+        run: mv build/*-runner* staging/${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}.jar
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.OUTPUT_NAME }}-${{ github.ref_name }}-jar
-          path: staging/${{ env.OUTPUT_NAME }}-*
+          name: ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-jar
+          path: staging/${{ env.OUTPUT_FILE_NAME }}-*
           if-no-files-found: error
 
   build-native:
@@ -100,13 +101,13 @@ jobs:
         shell: bash
         run: |
           ext="${{ runner.os == 'Windows' && '.exe' || '' }}"
-          mv build/*-runner${ext} staging/${{ env.OUTPUT_NAME }}-${{ github.ref_name }}-native-${{ runner.os }}-${{ runner.arch }}${ext}
+          mv build/*-runner${ext} staging/${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-native-${{ runner.os }}-${{ runner.arch }}${ext}
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.OUTPUT_NAME }}-${{ github.ref_name }}-native-${{ runner.os }}-${{ runner.arch }}
-          path: staging/${{ env.OUTPUT_NAME }}-*
+          name: ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-native-${{ runner.os }}-${{ runner.arch }}
+          path: staging/${{ env.OUTPUT_FILE_NAME }}-*
           if-no-files-found: error
 
   Release:
@@ -126,6 +127,6 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: executables/${{ env.OUTPUT_NAME }}-*
-          tag_name: ${{ github.ref_name }}
+          files: executables/${{ env.OUTPUT_FILE_NAME }}-*
+          name: "${{ env.OUTPUT_RELEASE_NAME }} ${{ github.ref_name }}"
           generate_release_notes: true
