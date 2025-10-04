@@ -1,0 +1,15 @@
+---
+quarkus:
+  package:
+    jar:
+      enabled: false
+  banner:
+    enabled: false
+  log:
+    level: WARN
+    category:
+      "fr.hequin0x":
+        level: INFO
+  rest-client:
+    livebox-api:
+      url: "http://192.168.1.1/ws"
