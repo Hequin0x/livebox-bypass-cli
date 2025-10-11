@@ -1,0 +1,132 @@
+---
+name: Build and Release
+
+on:
+  push:
+    tags: ['*.*.*']
+
+env:
+  OUTPUT_FILE_NAME: livebox-bypass-cli
+  OUTPUT_RELEASE_NAME: Livebox Bypass CLI
+
+permissions: {}
+
+jobs:
+  build-uber-jar:
+    name: Build Uber Jar
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Make staging directory
+        run: mkdir staging
+
+      - name: Set up GraalVM 25
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') }}
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Build with Gradle
+        run: ./gradlew --configuration-cache build -Dquarkus.package.jar.enabled=true -Dquarkus.package.jar.type=uber-jar
+
+      - name: Move Artifact (JAR)
+        run: mv build/*-runner* staging/${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}.jar
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-jar
+          path: staging/${{ env.OUTPUT_FILE_NAME }}-*
+          if-no-files-found: error
+
+  build-native:
+    name: Build ${{ matrix.os }} Native
+    runs-on: ${{ matrix.os }}
+
+    permissions:
+      contents: write
+
+    strategy:
+      matrix:
+        os: [
+          macos-15-intel,
+          macos-15,
+          ubuntu-24.04,
+          ubuntu-24.04-arm,
+          windows-latest
+        ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Make staging directory
+        run: mkdir staging
+
+      - name: Add msbuild to PATH
+        if: runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Visual Studio shell
+        if: runner.os == 'Windows'
+        uses: egor-tensin/vs-shell@v2
+
+      - name: Set up GraalVM 25
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/') }}
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Build with Gradle
+        run: ./gradlew build "-Dquarkus.native.enabled=true"
+
+      - name: Move Artifact
+        shell: bash
+        run: |
+          ext="${{ runner.os == 'Windows' && '.exe' || '' }}"
+          mv build/*-runner${ext} staging/${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-native-${{ runner.os }}-${{ runner.arch }}${ext}
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-native-${{ runner.os }}-${{ runner.arch }}
+          path: staging/${{ env.OUTPUT_FILE_NAME }}-*
+          if-no-files-found: error
+
+  Release:
+    needs: [build-uber-jar, build-native]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v5
+        with:
+          merge-multiple: true
+          path: "executables"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: executables/${{ env.OUTPUT_FILE_NAME }}-*
+          name: "${{ env.OUTPUT_RELEASE_NAME }} ${{ github.ref_name }}"
+          generate_release_notes: true
