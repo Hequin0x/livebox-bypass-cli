@@ -1,6 +1,6 @@
 package fr.hequin0x.liveboxbypasscli.security.filter;
 
-import fr.hequin0x.liveboxbypasscli.security.LiveboxAuthSession;
+import fr.hequin0x.liveboxbypasscli.security.session.LiveboxAuthSession;
 import jakarta.ws.rs.client.ClientRequestContext;
 import jakarta.ws.rs.client.ClientRequestFilter;
 import jakarta.ws.rs.ext.Provider;

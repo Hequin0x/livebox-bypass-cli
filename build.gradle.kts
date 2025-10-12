@@ -24,7 +24,7 @@ dependencies {
     // Other dependencies
     implementation("com.github.freva:ascii-table:1.8.0")
     // Test dependencies
-    testImplementation("io.quarkus:quarkus-junit5")
+    testImplementation("io.quarkus:quarkus-junit5-mockito")
     testImplementation("io.rest-assured:rest-assured")
 }
 

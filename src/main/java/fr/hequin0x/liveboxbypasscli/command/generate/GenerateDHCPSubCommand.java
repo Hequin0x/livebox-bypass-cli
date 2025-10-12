@@ -5,7 +5,7 @@ import fr.hequin0x.liveboxbypasscli.command.BaseAuthenticatedCommand;
 import fr.hequin0x.liveboxbypasscli.dto.request.mibs.MIBsRequest;
 import fr.hequin0x.liveboxbypasscli.dto.response.mibs.MIBsResponse;
 import fr.hequin0x.liveboxbypasscli.dto.response.mibs.dhcp.SentOption;
-import fr.hequin0x.liveboxbypasscli.security.LiveboxAuthSession;
+import fr.hequin0x.liveboxbypasscli.security.session.LiveboxAuthSession;
 import fr.hequin0x.liveboxbypasscli.service.LiveboxService;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;

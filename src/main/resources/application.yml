@@ -13,3 +13,8 @@ quarkus:
   rest-client:
     livebox-api:
       url: "http://192.168.1.1/ws"
+---
+liveboxbypasscli:
+  authentication:
+    generator:
+      prefix: "00:00:00:00:00:00:00:00:00:00:00:1A:09:00:00:05:58:01:03:41:01:"
