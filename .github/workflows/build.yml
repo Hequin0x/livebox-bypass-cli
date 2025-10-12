@@ -1,5 +1,5 @@
 ---
-name: Test
+name: Build
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  build:
 
     runs-on: ubuntu-latest
 
@@ -32,4 +32,4 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Execute Gradle Test
-        run: ./gradlew test
+        run: ./gradlew --configuration-cache build -Dquarkus.package.jar.enabled=true
