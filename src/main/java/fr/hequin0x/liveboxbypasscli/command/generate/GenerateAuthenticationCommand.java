@@ -46,7 +46,7 @@ public final class GenerateAuthenticationCommand implements Runnable {
         }
     }
 
-    private String generateAuthentication(String login, String password) throws NoSuchAlgorithmException {
+    private String generateAuthentication(final String login, final String password) throws NoSuchAlgorithmException {
         String random = this.generateRandom();
         String id = random.substring(0, 1);
 
@@ -66,7 +66,7 @@ public final class GenerateAuthenticationCommand implements Runnable {
         return AUTH_PREFIX + addSeparators(payload).toUpperCase();
     }
 
-    private String buildAuthenticationChain(String randomHex, String idHex, String digest) {
+    private String buildAuthenticationChain(final String randomHex, final String idHex, final String digest) {
         String randomHexLength = to1ByteHexLength(randomHex);
         String idHexLength = to1ByteHexLength(idHex);
         String chainLength = to1ByteHex((randomHex.length() + digest.length()) - 4);
