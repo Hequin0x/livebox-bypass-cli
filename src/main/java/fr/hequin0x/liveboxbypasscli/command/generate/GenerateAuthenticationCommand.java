@@ -56,7 +56,7 @@ public final class GenerateAuthenticationCommand implements Runnable {
         String digestInput = id + password + random;
         String digest = this.computeDigest(digestInput.getBytes(StandardCharsets.UTF_8));
 
-        String authChain = buildAuthenticationChain(randomHex, idHex, digest);
+        String authChain = this.buildAuthenticationChain(randomHex, idHex, digest);
 
         String loginHex = toHex(login);
         String loginPayload = to1ByteHexLength(loginHex) + loginHex;
