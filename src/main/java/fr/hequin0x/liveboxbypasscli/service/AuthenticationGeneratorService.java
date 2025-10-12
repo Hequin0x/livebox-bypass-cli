@@ -1,4 +1,4 @@
-package fr.hequin0x.liveboxbypasscli.security.authentication;
+package fr.hequin0x.liveboxbypasscli.service;
 
 import fr.hequin0x.liveboxbypasscli.configuration.AuthenticationGeneratorConfiguration;
 import jakarta.inject.Singleton;
@@ -11,11 +11,11 @@ import java.security.SecureRandom;
 import static fr.hequin0x.liveboxbypasscli.util.FormatterUtils.*;
 
 @Singleton
-public final class AuthenticationGenerator {
+public final class AuthenticationGeneratorService {
 
     private final AuthenticationGeneratorConfiguration configuration;
 
-    public AuthenticationGenerator(final AuthenticationGeneratorConfiguration configuration) {
+    public AuthenticationGeneratorService(final AuthenticationGeneratorConfiguration configuration) {
         this.configuration = configuration;
     }
 
