@@ -1,4 +1,4 @@
-package fr.hequin0x.liveboxbypasscli.security;
+package fr.hequin0x.liveboxbypasscli.security.session;
 
 import jakarta.inject.Singleton;
 

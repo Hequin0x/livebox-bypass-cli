@@ -2,7 +2,7 @@ package fr.hequin0x.liveboxbypasscli.command;
 
 import fr.hequin0x.liveboxbypasscli.dto.request.login.LoginRequest;
 import fr.hequin0x.liveboxbypasscli.dto.response.login.LoginResponse;
-import fr.hequin0x.liveboxbypasscli.security.LiveboxAuthSession;
+import fr.hequin0x.liveboxbypasscli.security.session.LiveboxAuthSession;
 import fr.hequin0x.liveboxbypasscli.service.LiveboxService;
 import org.jboss.resteasy.reactive.RestResponse;
 import picocli.CommandLine.Option;
