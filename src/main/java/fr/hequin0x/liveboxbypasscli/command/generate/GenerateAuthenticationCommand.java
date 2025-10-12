@@ -1,7 +1,7 @@
 package fr.hequin0x.liveboxbypasscli.command.generate;
 
 import com.github.freva.asciitable.AsciiTable;
-import fr.hequin0x.liveboxbypasscli.security.authentication.AuthenticationGenerator;
+import fr.hequin0x.liveboxbypasscli.service.AuthenticationGeneratorService;
 import org.jboss.logging.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -14,7 +14,7 @@ public final class GenerateAuthenticationCommand implements Runnable {
 
     private static final Logger LOG = Logger.getLogger(GenerateAuthenticationCommand.class);
 
-    private final AuthenticationGenerator authenticationGenerator;
+    private final AuthenticationGeneratorService authenticationGeneratorService;
 
     @Option(names = {"-l", "--login"}, description = "Orange login (fti/xxx)", required = true)
     private String login;
@@ -22,14 +22,14 @@ public final class GenerateAuthenticationCommand implements Runnable {
     @Option(names = {"-p", "--password"}, description = "Orange password", arity = "0..1", required = true, interactive = true)
     private String password;
 
-    public GenerateAuthenticationCommand(final AuthenticationGenerator authenticationGenerator) {
-        this.authenticationGenerator = authenticationGenerator;
+    public GenerateAuthenticationCommand(final AuthenticationGeneratorService authenticationGeneratorService) {
+        this.authenticationGeneratorService = authenticationGeneratorService;
     }
 
     @Override
     public void run() {
         try {
-            String authentication = this.authenticationGenerator.generateAuthentication(this.login, this.password);
+            String authentication = this.authenticationGeneratorService.generateAuthentication(this.login, this.password);
 
             String dhcpv4Table = AsciiTable.getTable(new String[] {"DHCPv4 Option", "Value"}, new String[][] {
                     {"90", authentication}
