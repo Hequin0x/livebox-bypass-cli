@@ -107,8 +107,9 @@ jobs:
           mv build/*-runner${ext} ${{ steps.vars.outputs.output_path }}/${{ env.OUTPUT_FILE_NAME }}${ext}
 
       - name: 'Tar files'
+        shell: bash
         run: |
-          tar -cfz ${{ steps.vars.outputs.output_path }}.tar.gz ${{ steps.vars.outputs.output_path }}
+          tar cfz ${{ steps.vars.outputs.output_path }}.tar.gz ${{ steps.vars.outputs.output_path }}
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
