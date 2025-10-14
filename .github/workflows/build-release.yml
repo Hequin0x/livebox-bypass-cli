@@ -99,8 +99,7 @@ jobs:
         shell: bash
         run: |
           ext="${{ runner.os == 'Windows' && '.exe' || '' }}"
-          mv build/*-runner${ext} ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-${{ runner.os }}-${{ runner.arch }} \
-            /${{ env.OUTPUT_FILE_NAME }}${ext}
+          mv build/*-runner${ext} ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-${{ runner.os }}-${{ runner.arch }}/${{ env.OUTPUT_FILE_NAME }}${ext}
 
       - name: 'Tar files'
         run: |
