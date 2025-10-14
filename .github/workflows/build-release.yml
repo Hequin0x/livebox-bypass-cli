@@ -108,8 +108,7 @@ jobs:
 
       - name: 'Tar files'
         run: |
-          tar -cfz ${{ steps.vars.outputs.output_path }}.tar.gz \ 
-              ${{ steps.vars.outputs.output_path }}
+          tar -cfz ${{ steps.vars.outputs.output_path }}.tar.gz ${{ steps.vars.outputs.output_path }}
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
