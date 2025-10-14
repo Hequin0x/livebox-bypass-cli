@@ -58,6 +58,9 @@ jobs:
     permissions:
       contents: write
 
+    env:
+      OUTPUT_FULL_PATH: ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-${{ runner.os }}-${{ runner.arch }}
+
     strategy:
       matrix:
         os: [
@@ -69,7 +72,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Make staging directory
-        run: mkdir ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-${{ runner.os }}-${{ runner.arch }}
+        run: mkdir ${{ env.OUTPUT_FULL_PATH }}
 
       - name: Add msbuild to PATH
         if: runner.os == 'Windows'
@@ -99,17 +102,17 @@ jobs:
         shell: bash
         run: |
           ext="${{ runner.os == 'Windows' && '.exe' || '' }}"
-          mv build/*-runner${ext} ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-${{ runner.os }}-${{ runner.arch }}/${{ env.OUTPUT_FILE_NAME }}${ext}
+          mv build/*-runner${ext} ${{ env.OUTPUT_FULL_PATH }}/${{ env.OUTPUT_FILE_NAME }}${ext}
 
       - name: 'Tar files'
         run: |
-          tar -cfz ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-${{ runner.os }}-${{ runner.arch }}.tar.gz \ 
-              ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}
+          tar -cfz ${{ env.OUTPUT_FULL_PATH }}.tar.gz \ 
+              ${{ env.OUTPUT_FULL_PATH }}
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.OUTPUT_FILE_NAME }}-${{ github.ref_name }}-${{ runner.os }}-${{ runner.arch }}
+          name: ${{ env.OUTPUT_FULL_PATH }}
           path: ${{ env.OUTPUT_FILE_NAME }}-*.tar.gz
           if-no-files-found: error
 
