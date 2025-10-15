@@ -32,4 +32,4 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Execute Gradle Test
-        run: ./gradlew --configuration-cache build -Dquarkus.package.jar.enabled=true
+        run: ./gradlew --configuration-cache build
