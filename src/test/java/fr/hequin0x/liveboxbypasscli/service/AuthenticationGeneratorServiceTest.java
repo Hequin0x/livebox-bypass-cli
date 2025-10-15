@@ -49,6 +49,8 @@ class AuthenticationGeneratorServiceTest {
         assertThrows(IllegalArgumentException.class, () -> authenticationGeneratorService.generateAuthentication("login", null));
         assertThrows(IllegalArgumentException.class, () -> authenticationGeneratorService.generateAuthentication("", "password"));
         assertThrows(IllegalArgumentException.class, () -> authenticationGeneratorService.generateAuthentication("login", ""));
+        assertThrows(IllegalArgumentException.class, () -> authenticationGeneratorService.generateAuthentication("   ", "password"));
+        assertThrows(IllegalArgumentException.class, () -> authenticationGeneratorService.generateAuthentication("login", "   "));
     }
 
 }
