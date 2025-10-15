@@ -20,7 +20,7 @@ class AuthenticationGeneratorServiceTest {
     AuthenticationGeneratorConfiguration configuration;
 
     @Test
-    void testValidAuthenticationGeneration() throws NoSuchAlgorithmException {
+    void shouldGenerateValidAuthentication() throws NoSuchAlgorithmException {
         String random = "4682b8985d10791c";
 
         AuthenticationGeneratorService authenticationGeneratorService = spy(new AuthenticationGeneratorService(configuration));
@@ -33,7 +33,17 @@ class AuthenticationGeneratorServiceTest {
     }
 
     @Test
-    void testInvalidAuthenticationGeneration() throws NoSuchAlgorithmException {
+    void shouldGenerateRandomOfLength16WithHexCharacters() throws NoSuchAlgorithmException {
+        AuthenticationGeneratorService authenticationGeneratorService = new AuthenticationGeneratorService(configuration);
+        String random = authenticationGeneratorService.generateRandom();
+
+        assertNotNull(random);
+        assertEquals(16, random.length());
+        assertTrue(random.matches("[0-9a-fA-F]+"));
+    }
+
+    @Test
+    void shouldNotGenerateExpectedAuthentication() throws NoSuchAlgorithmException {
         AuthenticationGeneratorService authenticationGeneratorService = new AuthenticationGeneratorService(configuration);
         String generatedAuth = authenticationGeneratorService.generateAuthentication("fti/xxxxxxx", "xxxxxxx");
 
@@ -42,7 +52,7 @@ class AuthenticationGeneratorServiceTest {
     }
 
     @Test
-    void testMissingLoginOrPassword() {
+    void shouldThrowExceptionForInvalidLoginOrPassword() {
         AuthenticationGeneratorService authenticationGeneratorService = new AuthenticationGeneratorService(configuration);
 
         assertThrows(IllegalArgumentException.class, () -> authenticationGeneratorService.generateAuthentication(null, "password"));
