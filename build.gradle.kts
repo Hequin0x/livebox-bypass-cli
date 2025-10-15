@@ -40,6 +40,17 @@ java {
 
 tasks.withType<Test> {
     systemProperty("java.util.logging.manager", "org.jboss.logmanager.LogManager")
+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
+    // Attach Mockito Java agent
+    jvmArgs(
+        "-javaagent:${classpath.find { it.name.startsWith("mockito-core") }?.absolutePath}"
+    )
+    // Enable detailed logging for tests
+    testLogging {
+        events("passed", "skipped", "failed")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showStandardStreams = true
+    }
 }
 
 tasks.withType<JavaCompile> {

@@ -1,8 +1,5 @@
 ---
 quarkus:
-  package:
-    jar:
-      enabled: false
   banner:
     enabled: false
   log:
