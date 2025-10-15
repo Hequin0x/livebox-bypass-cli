@@ -20,7 +20,7 @@ public final class AuthenticationGeneratorService {
     }
 
     public String generateAuthentication(final String login, final String password) throws NoSuchAlgorithmException {
-        if (login == null || login.isEmpty() || password == null || password.isEmpty()) {
+        if (login == null || login.isBlank() || password == null || password.isBlank()) {
             throw new IllegalArgumentException("Login and password must be provided");
         }
 
