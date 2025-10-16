@@ -64,7 +64,7 @@ public class WireMockExtensions implements QuarkusTestResourceLifecycleManager {
                                           "60": { "Value": "736167656d" },
                                           "61": { "Value": "01000000000000" },
                                           "77": { "Value": "2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7837" },
-                                          "90": { "Value": "{{randomValue length=140 type='HEXADECIMAL'}}" }
+                                          "90": { "Value": "00000000000000000000001A0900000558010341010B6674692F6C6F67696E3C12313233343536373839303132333435360313416324D17241350C0C74F222E3E7CDC13C" }
                                         }
                                       }
                                     },
