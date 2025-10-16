@@ -11,7 +11,7 @@ public record Option61(@JsonProperty("Value") String dhcpv6Value) {
 
     public String dhcpv4Value() {
         String value = this.dhcpv6Value.substring(2);
-        return addSeparators(value);
+        return addSeparators(value).toUpperCase();
     }
 
     public String dhcpv6Value() {

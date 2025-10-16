@@ -2,6 +2,7 @@
 
 ![GitHub License](https://img.shields.io/github/license/Hequin0x/livebox-bypass-cli)
 [![Build](https://github.com/Hequin0x/livebox-bypass-cli/actions/workflows/build.yml/badge.svg)](https://github.com/Hequin0x/livebox-bypass-cli/actions/workflows/build.yml)
+[![codecov](https://codecov.io/github/hequin0x/livebox-bypass-cli/graph/badge.svg?token=0V4AJKW6JT)](https://codecov.io/github/hequin0x/livebox-bypass-cli)
 ![GitHub Release](https://img.shields.io/github/v/release/Hequin0x/livebox-bypass-cli)
 
 ## Table of contents
