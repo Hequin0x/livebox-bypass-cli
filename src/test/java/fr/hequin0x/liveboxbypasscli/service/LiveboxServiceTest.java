@@ -70,9 +70,13 @@ class LiveboxServiceTest {
         // VLAN ID
         assertEquals(832, vlanId);
         
-        // VEIP0 Serial Number
+        // Serial Number
         assertEquals("SMBSXXXXXXXX", veip0.serialNumber());
+
+        // Hardware Version
         assertEquals("SMBSXLB7270400", veip0.hardwareVersion());
+
+        // Vendor ID
         assertEquals("SMBS", veip0.vendorId());
     }
 }
