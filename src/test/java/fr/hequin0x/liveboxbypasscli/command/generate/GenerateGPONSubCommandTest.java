@@ -9,12 +9,15 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectSpy;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import picocli.CommandLine;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 @QuarkusTest
 @QuarkusTestResource(WireMockExtensions.class)
@@ -29,13 +32,18 @@ class GenerateGPONSubCommandTest {
 
     @Test
     void shouldRunAndFetchMIBs() {
-        GenerateGPONSubCommand generateGPONSubCommand = spy(new GenerateGPONSubCommand(liveboxService, liveboxAuthSession));
+        try (MockedStatic<Logger> loggerMockedStatic = mockStatic(Logger.class)) {
+            Logger mockLogger = mock(Logger.class);
+            loggerMockedStatic.when(() -> Logger.getLogger(GenerateGPONSubCommand.class)).thenReturn(mockLogger);
 
-        String[] args = {"--password", "password"};
-        new CommandLine(generateGPONSubCommand).execute(args);
+            GenerateGPONSubCommand generateGPONSubCommand = spy(new GenerateGPONSubCommand(liveboxService, liveboxAuthSession));
+            String[] args = {"--password", "password"};
+            new CommandLine(generateGPONSubCommand).execute(args);
 
-        verify(generateGPONSubCommand).run();
-        verify(liveboxService).getMIBs(any(MIBsRequest.class));
+            verify(generateGPONSubCommand).run();
+            verify(liveboxService).getMIBs(any(MIBsRequest.class));
+            verify(mockLogger).info(anyString());
+        }
     }
 
 }

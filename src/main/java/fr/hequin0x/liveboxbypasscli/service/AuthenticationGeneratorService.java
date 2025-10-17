@@ -1,7 +1,7 @@
 package fr.hequin0x.liveboxbypasscli.service;
 
 import fr.hequin0x.liveboxbypasscli.configuration.AuthenticationGeneratorConfiguration;
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -10,7 +10,7 @@ import java.security.SecureRandom;
 
 import static fr.hequin0x.liveboxbypasscli.util.FormatterUtils.*;
 
-@Singleton
+@ApplicationScoped
 public final class AuthenticationGeneratorService {
 
     private final AuthenticationGeneratorConfiguration configuration;
