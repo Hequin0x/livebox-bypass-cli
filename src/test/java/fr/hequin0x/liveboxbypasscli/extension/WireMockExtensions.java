@@ -36,11 +36,11 @@ public class WireMockExtensions implements QuarkusTestResourceLifecycleManager {
                 .withHeader("Authorization", equalTo("X-Sah-Login"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/x-sah-ws-4-call+json")
-                        .withHeader("Set-Cookie", "SessionID")
+                        .withHeader("Set-Cookie", "randomGeneratedSessionID")
                         .withBody("""
                                 {
                                   "data": {
-                                    "contextID": "randomValue"
+                                    "contextID": "randomGeneratedContextID"
                                   }
                                 }
                                 """)));
@@ -51,6 +51,8 @@ public class WireMockExtensions implements QuarkusTestResourceLifecycleManager {
                 .withRequestBody(matchingJsonPath("$.service", equalTo("NeMo.Intf.data")))
                 .withRequestBody(matchingJsonPath("$.method", equalTo("getMIBs")))
                 .withHeader("Content-Type", equalTo("application/x-sah-ws-4-call+json"))
+                .withHeader("X-Context", equalTo("randomGeneratedContextID"))
+                .withHeader("Cookie", equalTo("randomGeneratedSessionID"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/x-sah-ws-4-call+json")
                         .withTransformers("response-template")

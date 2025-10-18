@@ -10,9 +10,9 @@ import picocli.CommandLine.Option;
         name = "authentication",
         description = "Generates DHCPV4/V6 Authentication with the provided login (fti/xxx) and password."
 )
-public final class GenerateAuthenticationCommand implements Runnable {
+public final class GenerateAuthenticationSubCommand implements Runnable {
 
-    private static final Logger LOG = Logger.getLogger(GenerateAuthenticationCommand.class);
+    private static final Logger LOG = Logger.getLogger(GenerateAuthenticationSubCommand.class);
 
     private final AuthenticationGeneratorService authenticationGeneratorService;
 
@@ -22,7 +22,7 @@ public final class GenerateAuthenticationCommand implements Runnable {
     @Option(names = {"-p", "--password"}, description = "Orange password", arity = "0..1", required = true, interactive = true)
     private String password;
 
-    public GenerateAuthenticationCommand(final AuthenticationGeneratorService authenticationGeneratorService) {
+    public GenerateAuthenticationSubCommand(final AuthenticationGeneratorService authenticationGeneratorService) {
         this.authenticationGeneratorService = authenticationGeneratorService;
     }
 

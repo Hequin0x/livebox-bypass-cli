@@ -1,10 +1,8 @@
 package fr.hequin0x.liveboxbypasscli.command.generate;
 
 import fr.hequin0x.liveboxbypasscli.dto.request.mibs.MIBsRequest;
-import fr.hequin0x.liveboxbypasscli.extension.WireMockExtensions;
 import fr.hequin0x.liveboxbypasscli.security.session.LiveboxAuthSession;
 import fr.hequin0x.liveboxbypasscli.service.LiveboxService;
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectSpy;
 import jakarta.inject.Inject;
@@ -18,7 +16,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @QuarkusTest
-@QuarkusTestResource(WireMockExtensions.class)
 class GenerateDHCPSubCommandTest {
 
     @InjectSpy
@@ -42,7 +39,6 @@ class GenerateDHCPSubCommandTest {
             verify(liveboxService).getMIBs(any(MIBsRequest.class));
             verify(mockLogger).infof(anyString(), any(), any(), any());
         }
-
     }
 
 }

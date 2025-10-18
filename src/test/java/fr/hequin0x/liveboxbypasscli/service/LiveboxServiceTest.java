@@ -28,8 +28,8 @@ class LiveboxServiceTest {
             assertNotNull(restResponse);
             assertEquals(200, restResponse.getStatus());
             assertNotNull(restResponse.getEntity());
-            assertEquals("randomValue", restResponse.getEntity().data().contextID());
-            assertEquals("SessionID", restResponse.getHeaderString("Set-Cookie"));
+            assertEquals("randomGeneratedContextID", restResponse.getEntity().data().contextID());
+            assertEquals("randomGeneratedSessionID", restResponse.getHeaderString("Set-Cookie"));
         }
     }
 
