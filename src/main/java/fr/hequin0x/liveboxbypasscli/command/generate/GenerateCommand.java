@@ -7,6 +7,6 @@ import picocli.CommandLine.Command;
         subcommands = {
                 GenerateDHCPSubCommand.class,
                 GenerateGPONSubCommand.class,
-                GenerateAuthenticationCommand.class
+                GenerateAuthenticationSubCommand.class
         })
 public final class GenerateCommand { }

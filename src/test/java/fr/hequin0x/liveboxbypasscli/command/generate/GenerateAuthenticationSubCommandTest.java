@@ -15,7 +15,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @QuarkusTest
-class GenerateAuthenticationCommandTest {
+class GenerateAuthenticationSubCommandTest {
 
     @InjectSpy
     AuthenticationGeneratorService authenticationGeneratorService;
@@ -24,13 +24,13 @@ class GenerateAuthenticationCommandTest {
     void shouldRunAndGenerateAuthentication() {
         try (MockedStatic<Logger> loggerMockedStatic = mockStatic(Logger.class)) {
             Logger mockLogger = mock(Logger.class);
-            loggerMockedStatic.when(() -> Logger.getLogger(GenerateAuthenticationCommand.class)).thenReturn(mockLogger);
+            loggerMockedStatic.when(() -> Logger.getLogger(GenerateAuthenticationSubCommand.class)).thenReturn(mockLogger);
 
-            GenerateAuthenticationCommand generateAuthenticationCommand = spy(new GenerateAuthenticationCommand(authenticationGeneratorService));
+            GenerateAuthenticationSubCommand generateAuthenticationSubCommand = spy(new GenerateAuthenticationSubCommand(authenticationGeneratorService));
             String[] args = {"--login", "fti/xxx", "--password", "xxx"};
-            new CommandLine(generateAuthenticationCommand).execute(args);
+            new CommandLine(generateAuthenticationSubCommand).execute(args);
 
-            verify(generateAuthenticationCommand).run();
+            verify(generateAuthenticationSubCommand).run();
             verify(authenticationGeneratorService).generateAuthentication("fti/xxx", "xxx");
             verify(mockLogger).infof(anyString(), any(), any());
         } catch (NoSuchAlgorithmException e) {
