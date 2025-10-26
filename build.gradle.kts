@@ -1,7 +1,7 @@
 plugins {
     java
     id("io.quarkus")
-    id("com.palantir.git-version") version "4.0.0"
+    id("com.palantir.git-version") version "4.1.0"
 }
 
 repositories {
@@ -27,7 +27,7 @@ dependencies {
     // Test dependencies
     testImplementation("io.quarkus:quarkus-junit5-mockito")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.wiremock:wiremock:$wiremockVersion")
+    testImplementation("org.wiremock:wiremock:4.0.0-beta.15")
     // Coverage
     testImplementation("io.quarkus:quarkus-jacoco")
 }
@@ -38,8 +38,8 @@ group = "fr.hequin0x"
 version = gitVersion()
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 tasks.withType<Test> {
