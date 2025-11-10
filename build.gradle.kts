@@ -27,7 +27,7 @@ dependencies {
     // Test dependencies
     testImplementation("io.quarkus:quarkus-junit5-mockito")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.wiremock:wiremock:4.0.0-beta.15")
+    testImplementation("org.wiremock:wiremock:4.0.0-beta.16")
     // Coverage
     testImplementation("io.quarkus:quarkus-jacoco")
 }
