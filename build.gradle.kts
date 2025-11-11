@@ -1,7 +1,7 @@
 plugins {
     java
     id("io.quarkus")
-    id("com.palantir.git-version") version "4.1.0"
+    id("com.palantir.git-version") version "4.2.0"
 }
 
 repositories {
@@ -27,7 +27,7 @@ dependencies {
     // Test dependencies
     testImplementation("io.quarkus:quarkus-junit5-mockito")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.wiremock:wiremock:4.0.0-beta.15")
+    testImplementation("org.wiremock:wiremock:4.0.0-beta.16")
     // Coverage
     testImplementation("io.quarkus:quarkus-jacoco")
 }
