@@ -34,12 +34,14 @@ public final class GenerateGPONSubCommand extends BaseAuthenticatedCommand imple
         VEIP0 veip0 = mibsResponse.status().gpon().veip0();
 
         String[][] data = {
-                {"Serial Number", veip0.serialNumber()},
-                {"Hardware Version", veip0.hardwareVersion()},
-                {"Vendor ID", veip0.vendorId()}
+                {"Serial Number", veip0.serialNumber(), "YES"},
+                {"Hardware Version", veip0.hardwareVersion(), "YES"},
+                {"Vendor ID", veip0.vendorId(), "YES"},
+                {"Software Version 0", veip0.ontSoftwareVersion0(), "NO"},
+                {"Software Version 1", veip0.ontSoftwareVersion1(), "NO"},
         };
 
-        String[] headers = {"Option", "Value"};
+        String[] headers = {"Option", "Value", "Mandatory"};
         LOG.info("\n" + AsciiTable.getTable(headers, data));
     }
 }

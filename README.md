@@ -91,6 +91,8 @@ You can provide credentials using:
               - **Serial number**
               - **Hardware version**
               - **Vendor ID**
+              - **Software Version 0**
+              - **Software Version 1**
   - `authentication`
     - Generates DHCPV4/V6 Authentication with the provided login (fti/xxx) and password.
         - Requires Orange login (fti/xxx) and password, not the Livebox admin ones.

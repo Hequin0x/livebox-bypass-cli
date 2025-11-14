@@ -78,5 +78,11 @@ class LiveboxServiceTest {
 
         // Vendor ID
         assertEquals("SMBS", veip0.vendorId());
+
+        // Software Version 0
+        assertEquals("SAHEOFR030203", veip0.ontSoftwareVersion0());
+
+        // Software Version 1
+        assertEquals("SAHEOFR030102", veip0.ontSoftwareVersion1());
     }
 }

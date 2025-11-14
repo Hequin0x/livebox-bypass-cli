@@ -70,7 +70,15 @@ public class WireMockExtensions implements QuarkusTestResourceLifecycleManager {
                                         }
                                       }
                                     },
-                                    "gpon": { "veip0": { "SerialNumber": "SMBSXXXXXXXX", "HardwareVersion": "SMBSXLB7270400", "VendorId": "SMBS" } },
+                                    "gpon": {
+                                      "veip0": {
+                                        "SerialNumber": "SMBSXXXXXXXX",
+                                        "HardwareVersion": "SMBSXLB7270400",
+                                        "VendorId": "SMBS",
+                                        "ONTSoftwareVersion0": "SAHEOFR030203",
+                                        "ONTSoftwareVersion1": "SAHEOFR030102"
+                                      }
+                                    },
                                     "vlan": { "gvlan_multi": { "VLANID": 832 } }
                                   }
                                 }
