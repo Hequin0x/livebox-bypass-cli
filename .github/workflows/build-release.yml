@@ -98,7 +98,7 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Build with Gradle
-        run: ./gradlew build "-Dquarkus.package.jar.enabled=false -Dquarkus.native.enabled=true"
+        run: ./gradlew build -Dquarkus.package.jar.enabled=false -Dquarkus.native.enabled=true
 
       - name: Move Artifact
         shell: bash
