@@ -23,7 +23,7 @@ dependencies {
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-config-yaml")
     // Other dependencies
-    implementation("com.github.freva:ascii-table:1.8.0")
+    implementation("com.github.freva:ascii-table:1.9.0")
     // Test dependencies
     testImplementation("io.quarkus:quarkus-junit5-mockito")
     testImplementation("io.rest-assured:rest-assured")
