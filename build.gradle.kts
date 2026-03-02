@@ -1,7 +1,7 @@
 plugins {
     java
     id("io.quarkus")
-    id("com.palantir.git-version") version "4.2.0"
+    id("com.palantir.git-version") version "5.0.0"
 }
 
 repositories {
