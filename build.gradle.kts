@@ -1,7 +1,7 @@
 plugins {
     java
     id("io.quarkus")
-    id("com.palantir.git-version") version "4.2.0"
+    id("com.palantir.git-version") version "5.0.0"
 }
 
 repositories {
@@ -23,11 +23,11 @@ dependencies {
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-config-yaml")
     // Other dependencies
-    implementation("com.github.freva:ascii-table:1.8.0")
+    implementation("com.github.freva:ascii-table:1.9.0")
     // Test dependencies
     testImplementation("io.quarkus:quarkus-junit5-mockito")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.wiremock:wiremock:4.0.0-beta.17")
+    testImplementation("org.wiremock:wiremock:4.0.0-beta.29")
     // Coverage
     testImplementation("io.quarkus:quarkus-jacoco")
 }
