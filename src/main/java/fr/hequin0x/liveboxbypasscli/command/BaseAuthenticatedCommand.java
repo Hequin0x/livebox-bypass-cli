@@ -24,7 +24,7 @@ public abstract class BaseAuthenticatedCommand {
         return this.liveboxService;
     }
 
-    public void login() {
+    public void login() throws Throwable{
         if (this.liveboxAuthSession.isAuthenticated()) {
             return;
         }
@@ -35,8 +35,6 @@ public abstract class BaseAuthenticatedCommand {
 
             this.liveboxAuthSession.setCookie(cookie);
             this.liveboxAuthSession.setContextID(contextID);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to login to Livebox", e);
         }
     }
 }
