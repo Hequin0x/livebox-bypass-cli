@@ -42,4 +42,19 @@ class GenerateGPONSubCommandTest {
         }
     }
 
+    @Test
+    void shouldLogErrorWhenAnExceptionIsThrown() {
+        try (MockedStatic<Logger> loggerMockedStatic = mockStatic(Logger.class)) {
+            Logger mockLogger = mock(Logger.class);
+            loggerMockedStatic.when(() -> Logger.getLogger(GenerateGPONSubCommand.class)).thenReturn(mockLogger);
+
+            doThrow(new RuntimeException("boom")).when(liveboxService).getMIBs(any(MIBsRequest.class));
+
+            GenerateGPONSubCommand generateGPONSubCommand = new GenerateGPONSubCommand(liveboxService, liveboxAuthSession);
+
+            generateGPONSubCommand.run();
+            verify(mockLogger).error(anyString(), any(Throwable.class));
+        }
+    }
+
 }

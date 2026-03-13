@@ -8,6 +8,7 @@ import io.quarkus.test.junit.mockito.InjectSpy;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import picocli.CommandLine;
@@ -25,6 +26,12 @@ class GenerateDHCPSubCommandTest {
     @Inject
     LiveboxAuthSession liveboxAuthSession;
 
+    @BeforeEach
+    void resetLiveAuthSession() {
+        liveboxAuthSession.setContextID(null);
+        liveboxAuthSession.setCookie(null);
+    }
+
     @Test
     void shouldRunAndFetchMIBs() {
         try (MockedStatic<Logger> loggerMockedStatic = mockStatic(Logger.class)) {
@@ -38,6 +45,21 @@ class GenerateDHCPSubCommandTest {
             verify(generateDHCPSubCommand).run();
             verify(liveboxService).getMIBs(any(MIBsRequest.class));
             verify(mockLogger).infof(anyString(), any(), any(), any());
+        }
+    }
+
+    @Test
+    void shouldLogErrorWhenAnExceptionIsThrown() {
+        try (MockedStatic<Logger> loggerMockedStatic = mockStatic(Logger.class)) {
+            Logger mockLogger = mock(Logger.class);
+            loggerMockedStatic.when(() -> Logger.getLogger(GenerateDHCPSubCommand.class)).thenReturn(mockLogger);
+
+            doThrow(new RuntimeException("boom")).when(liveboxService).getMIBs(any(MIBsRequest.class));
+
+            GenerateDHCPSubCommand generateDHCPSubCommand = new GenerateDHCPSubCommand(liveboxService, liveboxAuthSession);
+
+            generateDHCPSubCommand.run();
+            verify(mockLogger).error(anyString(), any(Throwable.class));
         }
     }
 
