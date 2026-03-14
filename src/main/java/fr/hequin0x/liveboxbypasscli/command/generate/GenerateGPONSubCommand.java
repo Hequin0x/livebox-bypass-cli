@@ -25,8 +25,12 @@ public final class GenerateGPONSubCommand extends BaseAuthenticatedCommand imple
 
     @Override
     public void run() {
-        this.login();
-        this.generateGPONConfiguration();
+        try {
+            this.login();
+            this.generateGPONConfiguration();
+        } catch (Exception e) {
+            LOG.error("An error occurred while generating GPON configuration", e);
+        }
     }
 
     private void generateGPONConfiguration() {
