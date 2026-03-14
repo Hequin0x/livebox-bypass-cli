@@ -25,8 +25,12 @@ public final class GenerateDHCPSubCommand extends BaseAuthenticatedCommand imple
 
     @Override
     public void run() {
-        this.login();
-        this.generateDHCPOptions();
+        try {
+            this.login();
+            this.generateDHCPOptions();
+        } catch (Exception e) {
+            LOG.error("An error occurred while generating DHCP options", e);
+        }
     }
 
     private void generateDHCPOptions() {
