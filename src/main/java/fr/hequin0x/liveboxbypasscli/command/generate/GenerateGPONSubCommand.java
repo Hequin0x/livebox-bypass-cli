@@ -1,5 +1,6 @@
 package fr.hequin0x.liveboxbypasscli.command.generate;
 
+import com.google.common.collect.ImmutableMap;
 import fr.hequin0x.liveboxbypasscli.command.BaseAuthenticatedCommand;
 import fr.hequin0x.liveboxbypasscli.dto.request.mibs.MIBsRequest;
 import fr.hequin0x.liveboxbypasscli.dto.response.mibs.MIBsResponse;
@@ -10,8 +11,9 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import picocli.CommandLine.Command;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static fr.hequin0x.liveboxbypasscli.util.OutputFormatter.formatOutput;
 
 @Command(
         name = "gpon",
@@ -39,17 +41,16 @@ public final class GenerateGPONSubCommand extends BaseAuthenticatedCommand imple
         MIBsResponse mibsResponse = this.getLiveboxService().getMIBs(new MIBsRequest());
         VEIP0 veip0 = mibsResponse.status().gpon().veip0();
 
-        String[][] data = {
-                {"Serial Number", veip0.serialNumber(), "YES"},
-                {"Hardware Version", veip0.hardwareVersion(), "YES"},
-                {"Vendor ID", veip0.vendorId(), "YES"},
-                {"Software Version 0", veip0.ontSoftwareVersion0(), "NO"},
-                {"Software Version 1", veip0.ontSoftwareVersion1(), "NO"},
-        };
+        Map<String, Map<String, String>> data = Map.of(
+                "GPON Configuration", ImmutableMap.of(
+                        "Serial Number", veip0.serialNumber(),
+                        "Hardware Version", veip0.hardwareVersion(),
+                        "Vendor ID", veip0.vendorId(),
+                        "Software Version 0", veip0.ontSoftwareVersion0(),
+                        "Software Version 1", veip0.ontSoftwareVersion1()
+                )
+        );
 
-        Map<String[], String[][]> tables = new LinkedHashMap<>();
-        tables.put(new String[]{"GPON Option", "Value", "Mandatory"}, data);
-
-        LOG.info(this.formatOutput(tables));
+        LOG.info(formatOutput(data));
     }
 }
