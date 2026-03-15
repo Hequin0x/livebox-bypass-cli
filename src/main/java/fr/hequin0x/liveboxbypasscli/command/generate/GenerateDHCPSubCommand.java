@@ -1,6 +1,5 @@
 package fr.hequin0x.liveboxbypasscli.command.generate;
 
-import com.github.freva.asciitable.AsciiTable;
 import fr.hequin0x.liveboxbypasscli.command.BaseAuthenticatedCommand;
 import fr.hequin0x.liveboxbypasscli.dto.request.mibs.MIBsRequest;
 import fr.hequin0x.liveboxbypasscli.dto.response.mibs.MIBsResponse;
@@ -10,6 +9,9 @@ import fr.hequin0x.liveboxbypasscli.service.LiveboxService;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import picocli.CommandLine.Command;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Command(
         name = "dhcp",
@@ -40,8 +42,12 @@ public final class GenerateDHCPSubCommand extends BaseAuthenticatedCommand imple
         Integer wanVlanID = mibsResponse.status().vlan().gvlanMulti().vlanID();
         SentOption sentOption = mibsResponse.status().dhcp().dhcpData().sentOption();
 
-        String[][] dhcpWANOptions = {
-                {"CoS", dhcpCos.toString(), "VLAN ID", wanVlanID.toString()}
+        String[][] dhcpOptions = {
+                {"CoS", dhcpCos.toString()}
+        };
+
+        String[][] wanOptions = {
+                {"VLAN ID", wanVlanID.toString()}
         };
 
         String[][] dhcpv4Options = {
@@ -58,11 +64,13 @@ public final class GenerateDHCPSubCommand extends BaseAuthenticatedCommand imple
                 {"11", sentOption.option90().dhcpv6Value()}
         };
 
-        String dhcpWANTable = AsciiTable.getTable(new String[] {"DHCPv4/v6 Option", "Value", "WAN Option", "Value"}, dhcpWANOptions);
-        String dhcpv4Table = AsciiTable.getTable(new String[] {"DHCPv4 Option", "Value"}, dhcpv4Options);
-        String dhcpv6Table = AsciiTable.getTable(new String[] {"DHCPv6 Option", "Value"}, dhcpv6Options);
+        Map<String[], String[][]> tables = new LinkedHashMap<>();
+        tables.put(new String[]{"DHCPv4/v6 Option", "Value"}, dhcpOptions);
+        tables.put(new String[]{"WAN Option", "Value"}, wanOptions);
+        tables.put(new String[]{"DHCPv4 Option", "Value"}, dhcpv4Options);
+        tables.put(new String[]{"DHCPv6 Option", "Value"}, dhcpv6Options);
 
-        LOG.infof("\n%s\n%s\n%s", dhcpWANTable, dhcpv4Table, dhcpv6Table);
+        LOG.info(this.formatOutput(tables));
     }
 
 }

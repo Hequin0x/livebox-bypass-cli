@@ -1,6 +1,5 @@
 package fr.hequin0x.liveboxbypasscli.command.generate;
 
-import com.github.freva.asciitable.AsciiTable;
 import fr.hequin0x.liveboxbypasscli.command.BaseAuthenticatedCommand;
 import fr.hequin0x.liveboxbypasscli.dto.request.mibs.MIBsRequest;
 import fr.hequin0x.liveboxbypasscli.dto.response.mibs.MIBsResponse;
@@ -10,6 +9,9 @@ import fr.hequin0x.liveboxbypasscli.service.LiveboxService;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import picocli.CommandLine.Command;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Command(
         name = "gpon",
@@ -45,7 +47,9 @@ public final class GenerateGPONSubCommand extends BaseAuthenticatedCommand imple
                 {"Software Version 1", veip0.ontSoftwareVersion1(), "NO"},
         };
 
-        String[] headers = {"Option", "Value", "Mandatory"};
-        LOG.info("\n" + AsciiTable.getTable(headers, data));
+        Map<String[], String[][]> tables = new LinkedHashMap<>();
+        tables.put(new String[]{"GPON Option", "Value", "Mandatory"}, data);
+
+        LOG.info(this.formatOutput(tables));
     }
 }
