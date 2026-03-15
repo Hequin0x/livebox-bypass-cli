@@ -37,7 +37,7 @@ class GenerateDHCPSubCommandTest {
 
             verify(generateDHCPSubCommand).run();
             verify(liveboxService).getMIBs(any(MIBsRequest.class));
-            verify(mockLogger).infof(anyString(), any(), any(), any());
+            verify(mockLogger).info(anyString());
         }
     }
 
