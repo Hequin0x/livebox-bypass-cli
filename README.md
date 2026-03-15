@@ -13,7 +13,6 @@
     - [Available platforms](#available-platforms)
 - [Usage](#usage)
     - [Authentication](#authentication)
-    - [Output format](#output-format)
     - [Examples](#examples)
 - [Commands](#commands)
 - [Disclaimer](#disclaimer)
@@ -54,20 +53,6 @@ You can provide credentials using:
 
 **Security Note**: Prefer `-p` without a password argument to avoid exposing your password in shell history or process lists.
 
-### Output format
-
-Commands that generate output support the `-f` / `--format` option.
-
-Supported formats:
-- `table` (**default**): displays the result as formatted ASCII tables
-- `raw`: displays the result as simple `key -> value` pairs grouped by section
-  - This is useful for easily copying values without extra formatting.
-
-Examples:
-- `./livebox-bypass-cli generate dhcp -p -f raw`
-
-Note: In `raw` format, only the option name and value are displayed. Additional columns shown in table output, such as the GPON `Mandatory` column, are not included.
-
 ### Examples
 
 - Interactive password prompt:
@@ -77,18 +62,12 @@ Note: In `raw` format, only the option name and value are displayed. Additional 
 - Non-interactive (not recommended):
     - `./livebox-bypass-cli generate dhcp -p yourAdminPassword`
 
-- Raw output:
-    - `./livebox-bypass-cli generate dhcp -f raw -p`
-    - `./livebox-bypass-cli generate gpon --format raw -p`
-    - `./livebox-bypass-cli generate authentication -f raw -l fti/xxxx -p`
-
 ## Commands
 
 - `generate`
   - `dhcp`
       - Generates DHCPv4 and DHCPv6 configurations for bypassing the Livebox.
           - Requires authentication.
-          - Supports `-f` / `--format` (`table` or `raw`).
           - Output:
             - DHCPv4/v6 options
                 - **CoS**
@@ -107,7 +86,6 @@ Note: In `raw` format, only the option name and value are displayed. Additional 
   - `gpon`
       - Generates GPON configurations for bypassing the Livebox.
           - Requires authentication.
-          - Supports `-f` / `--format` (`table` or `raw`).
           - Note: **GPON** options are also valid for **XGS-PON**
           - Output:
               - **Serial number**
@@ -118,7 +96,6 @@ Note: In `raw` format, only the option name and value are displayed. Additional 
   - `authentication`
     - Generates DHCPV4/V6 Authentication with the provided login (fti/xxx) and password.
         - Requires Orange login (fti/xxx) and password, not the Livebox admin ones.
-        - Supports `-f` / `--format` (`table` or `raw`).
         - This command is useful in case you need to generate the authentication option but don't have access to your Livebox.
         - Output:
             - DHCPv4 option

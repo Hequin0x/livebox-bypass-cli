@@ -1,5 +1,6 @@
 package fr.hequin0x.liveboxbypasscli.command.generate;
 
+import com.google.common.collect.ImmutableMap;
 import fr.hequin0x.liveboxbypasscli.command.BaseAuthenticatedCommand;
 import fr.hequin0x.liveboxbypasscli.dto.request.mibs.MIBsRequest;
 import fr.hequin0x.liveboxbypasscli.dto.response.mibs.MIBsResponse;
@@ -10,8 +11,9 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import picocli.CommandLine.Command;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static fr.hequin0x.liveboxbypasscli.util.OutputFormatter.formatOutput;
 
 @Command(
         name = "dhcp",
@@ -42,35 +44,23 @@ public final class GenerateDHCPSubCommand extends BaseAuthenticatedCommand imple
         Integer wanVlanID = mibsResponse.status().vlan().gvlanMulti().vlanID();
         SentOption sentOption = mibsResponse.status().dhcp().dhcpData().sentOption();
 
-        String[][] dhcpOptions = {
-                {"CoS", dhcpCos.toString()}
-        };
+        Map<String, Map<String, String>> data = ImmutableMap.of(
+                "DHCPv4/v6 Options", Map.of("CoS", dhcpCos.toString()),
+                "WAN Options", Map.of("VLAN ID", wanVlanID.toString()),
+                "DHCPv4 Options", ImmutableMap.of(
+                        "60", sentOption.option60().dhcpv4Value(),
+                        "61", sentOption.option61().dhcpv4Value(),
+                        "77", sentOption.option77().value(),
+                        "90", sentOption.option90().dhcpv4Value()
+                ),
+                "DHCPv6 Options", ImmutableMap.of(
+                        "16", sentOption.option60().dhcpv6Value(),
+                        "1", sentOption.option61().dhcpv6Value(),
+                        "15", sentOption.option77().value(),
+                        "11", sentOption.option90().dhcpv6Value()
+                ));
 
-        String[][] wanOptions = {
-                {"VLAN ID", wanVlanID.toString()}
-        };
-
-        String[][] dhcpv4Options = {
-                {"60", sentOption.option60().dhcpv4Value()},
-                {"61", sentOption.option61().dhcpv4Value()},
-                {"77", sentOption.option77().value()},
-                {"90", sentOption.option90().dhcpv4Value()}
-        };
-
-        String[][] dhcpv6Options = {
-                {"16", sentOption.option60().dhcpv6Value()},
-                {"1", sentOption.option61().dhcpv6Value()},
-                {"15", sentOption.option77().value()},
-                {"11", sentOption.option90().dhcpv6Value()}
-        };
-
-        Map<String[], String[][]> tables = new LinkedHashMap<>();
-        tables.put(new String[]{"DHCPv4/v6 Option", "Value"}, dhcpOptions);
-        tables.put(new String[]{"WAN Option", "Value"}, wanOptions);
-        tables.put(new String[]{"DHCPv4 Option", "Value"}, dhcpv4Options);
-        tables.put(new String[]{"DHCPv6 Option", "Value"}, dhcpv6Options);
-
-        LOG.info(this.formatOutput(tables));
+        LOG.info(formatOutput(data));
     }
 
 }

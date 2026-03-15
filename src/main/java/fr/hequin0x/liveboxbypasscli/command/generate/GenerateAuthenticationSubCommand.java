@@ -1,19 +1,20 @@
 package fr.hequin0x.liveboxbypasscli.command.generate;
 
-import fr.hequin0x.liveboxbypasscli.command.formatting.FormattableOutput;
+import com.google.common.collect.ImmutableMap;
 import fr.hequin0x.liveboxbypasscli.service.AuthenticationGeneratorService;
 import org.jboss.logging.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static fr.hequin0x.liveboxbypasscli.util.OutputFormatter.formatOutput;
 
 @Command(
         name = "authentication",
         description = "Generates DHCPV4/V6 Authentication with the provided login (fti/xxx) and password."
 )
-public final class GenerateAuthenticationSubCommand extends FormattableOutput implements Runnable {
+public final class GenerateAuthenticationSubCommand implements Runnable {
 
     private static final Logger LOG = Logger.getLogger(GenerateAuthenticationSubCommand.class);
 
@@ -33,20 +34,14 @@ public final class GenerateAuthenticationSubCommand extends FormattableOutput im
     public void run() {
         try {
             String authentication = this.authenticationGeneratorService.generateAuthentication(this.login, this.password);
+            String dhcpv6Authentication = authentication.replace(":", "");
 
-            String[][] dhcpv4Options = {
-                    {"90", authentication}
-            };
+            Map<String, Map<String, String>> data = ImmutableMap.of(
+                    "DHCPv4 Options", Map.of("90", authentication),
+                    "DHCPv6 Options", Map.of("11", dhcpv6Authentication)
+            );
 
-            String[][] dhcpv6Options = {
-                    {"11", authentication.replace(":", "")}
-            };
-
-            Map<String[], String[][]> tables = new LinkedHashMap<>();
-            tables.put(new String[]{"DHCPv4 Option", "Value"}, dhcpv4Options);
-            tables.put(new String[]{"DHCPv6 Option", "Value"}, dhcpv6Options);
-
-            LOG.info(this.formatOutput(tables));
+            LOG.info(formatOutput(data));
         } catch (Exception e) {
             LOG.error("An error occurred while generating the authentication", e);
         }
