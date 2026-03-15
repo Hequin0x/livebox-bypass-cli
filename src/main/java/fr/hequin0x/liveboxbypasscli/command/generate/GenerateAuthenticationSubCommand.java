@@ -1,16 +1,19 @@
 package fr.hequin0x.liveboxbypasscli.command.generate;
 
-import com.github.freva.asciitable.AsciiTable;
+import fr.hequin0x.liveboxbypasscli.command.formatting.FormattableOutput;
 import fr.hequin0x.liveboxbypasscli.service.AuthenticationGeneratorService;
 import org.jboss.logging.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Command(
         name = "authentication",
         description = "Generates DHCPV4/V6 Authentication with the provided login (fti/xxx) and password."
 )
-public final class GenerateAuthenticationSubCommand implements Runnable {
+public final class GenerateAuthenticationSubCommand extends FormattableOutput implements Runnable {
 
     private static final Logger LOG = Logger.getLogger(GenerateAuthenticationSubCommand.class);
 
@@ -31,15 +34,19 @@ public final class GenerateAuthenticationSubCommand implements Runnable {
         try {
             String authentication = this.authenticationGeneratorService.generateAuthentication(this.login, this.password);
 
-            String dhcpv4Table = AsciiTable.getTable(new String[] {"DHCPv4 Option", "Value"}, new String[][] {
+            String[][] dhcpv4Options = {
                     {"90", authentication}
-            });
+            };
 
-            String dhcpv6Table = AsciiTable.getTable(new String[] {"DHCPv6 Option", "Value"}, new String[][] {
+            String[][] dhcpv6Options = {
                     {"11", authentication.replace(":", "")}
-            });
+            };
 
-            LOG.infof("\n%s\n%s", dhcpv4Table, dhcpv6Table);
+            Map<String[], String[][]> tables = new LinkedHashMap<>();
+            tables.put(new String[]{"DHCPv4 Option", "Value"}, dhcpv4Options);
+            tables.put(new String[]{"DHCPv6 Option", "Value"}, dhcpv6Options);
+
+            LOG.info(this.formatOutput(tables));
         } catch (Exception e) {
             LOG.error("An error occurred while generating the authentication", e);
         }

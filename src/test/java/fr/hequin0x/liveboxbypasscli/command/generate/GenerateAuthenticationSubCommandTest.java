@@ -10,7 +10,6 @@ import picocli.CommandLine;
 
 import java.security.NoSuchAlgorithmException;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -32,7 +31,7 @@ class GenerateAuthenticationSubCommandTest {
 
             verify(generateAuthenticationSubCommand).run();
             verify(authenticationGeneratorService).generateAuthentication("fti/xxx", "xxx");
-            verify(mockLogger).infof(anyString(), any(), any());
+            verify(mockLogger).info(anyString());
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
