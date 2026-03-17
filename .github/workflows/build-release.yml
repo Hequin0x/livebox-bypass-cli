@@ -23,23 +23,23 @@ jobs:
         platform:
           - os: ubuntu-24.04
             target: x86_64-unknown-linux-musl
-            package: ${{ env.BUILD_FILE_NAME }}-Linux-x86_64.tar.gz
+            package: livebox-bypass-cli-Linux-x86_64.tar.gz
 
           - os: ubuntu-24.04
             target: aarch64-unknown-linux-musl
-            package: ${{ env.BUILD_FILE_NAME }}-Linux-aarch64.tar.gz
+            package: livebox-bypass-cli-Linux-aarch64.tar.gz
 
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            package: ${{ env.BUILD_FILE_NAME }}-Windows-x86_64.zip
+            package: livebox-bypass-cli-Windows-x86_64.zip
 
           - os: macOS-26
             target: aarch64-apple-darwin
-            package: ${{ env.BUILD_FILE_NAME }}-macOS-aarch64.tar.gz
+            package: livebox-bypass-cli-macOS-aarch64.tar.gz
 
           - os: macOS-26-intel
             target: x86_64-apple-darwin
-            package: ${{ env.BUILD_FILE_NAME }}-macOS-x86_64.tar.gz
+            package: livebox-bypass-cli-macOS-x86_64.tar.gz
 
     steps:
       - uses: actions/checkout@v6
