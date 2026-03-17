@@ -1,5 +1,5 @@
 use anyhow::{bail, Result};
-use rand::RngCore;
+use rand::TryRng;
 
 use crate::formatters::hex_formatter::{add_separators, to_1_byte_hex, to_1_byte_hex_length, to_hex};
 
@@ -53,7 +53,7 @@ impl AuthenticationGenerator {
 
     pub fn generate_random(&self) -> Result<String> {
         let mut bytes = [0u8; 1024];
-        rand::rngs::OsRng.fill_bytes(&mut bytes);
+        rand::rngs::SysRng.try_fill_bytes(&mut bytes)?;
         Ok(self.compute_digest(&bytes)[0..16].to_string())
     }
 

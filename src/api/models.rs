@@ -81,7 +81,7 @@ pub struct Dhcp {
 #[derive(Debug, Deserialize)]
 pub struct DhcpData {
     #[serde(rename = "PriorityMark")]
-    pub priority_mark: i32,
+    pub priority_mark: u16,
     #[serde(rename = "SentOption")]
     pub sent_option: SentOption,
 }
@@ -101,13 +101,13 @@ pub struct SentOption {
 #[derive(Debug, Deserialize)]
 pub struct Option60 {
     #[serde(rename = "Value")]
-    pub dhcpv6_value: String,
+    pub value: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Option61 {
     #[serde(rename = "Value")]
-    pub dhcpv6_value: String,
+    pub value: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -119,7 +119,7 @@ pub struct Option77 {
 #[derive(Debug, Deserialize)]
 pub struct Option90 {
     #[serde(rename = "Value")]
-    pub dhcpv6_value: String,
+    pub value: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -150,5 +150,5 @@ pub struct Vlan {
 #[derive(Debug, Deserialize)]
 pub struct GvlanMulti {
     #[serde(rename = "VLANID")]
-    pub vlan_id: i32,
+    pub vlan_id: u16,
 }

@@ -7,10 +7,10 @@ use livebox_bypass_cli::renderers::options::{
 
 #[test]
 fn option_transforms_produce_correct_values() {
-    let o60 = Option60 { dhcpv6_value: "736167656d".into() };
-    let o61 = Option61 { dhcpv6_value: "01000000000000".into() };
+    let o60 = Option60 { value: "736167656d".into() };
+    let o61 = Option61 { value: "01000000000000".into() };
     let o77 = Option77 { value: "2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7837".into() };
-    let o90 = Option90 { dhcpv6_value: "00000000000000000000001A0900000558010341010B6674692F6C6F67696E3C12313233343536373839303132333435360313416324D17241350C0C74F222E3E7CDC13C".into() };
+    let o90 = Option90 { value: "00000000000000000000001A0900000558010341010B6674692F6C6F67696E3C12313233343536373839303132333435360313416324D17241350C0C74F222E3E7CDC13C".into() };
 
     assert_eq!(option60_dhcpv4_value(&o60).unwrap(), "sagem");
     assert_eq!(option60_dhcpv6_value(&o60), "0000040E0005736167656D");

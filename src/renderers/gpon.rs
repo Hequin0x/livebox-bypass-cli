@@ -1,19 +1,34 @@
 use crate::api::models::MibsResponse;
-use crate::formatters::output_formatter::{format_output, Section};
+use crate::formatters::output_formatter::{format_output, Row, Section};
 
 pub fn render_gpon(mibs: &MibsResponse) -> String {
     let veip0 = &mibs.status.gpon.veip0;
 
-    let sections: Vec<Section> = vec![(
-        "GPON Configuration",
-        vec![
-            ("Serial Number", veip0.serial_number.clone()),
-            ("Hardware Version", veip0.hardware_version.clone()),
-            ("Vendor ID", veip0.vendor_id.clone()),
-            ("Software Version 0", veip0.ont_software_version0.clone()),
-            ("Software Version 1", veip0.ont_software_version1.clone()),
+    let sections = vec![Section {
+        title: "GPON Configuration",
+        rows: vec![
+            Row {
+                key: "Serial Number",
+                value: veip0.serial_number.clone(),
+            },
+            Row {
+                key: "Hardware Version",
+                value: veip0.hardware_version.clone(),
+            },
+            Row {
+                key: "Vendor ID",
+                value: veip0.vendor_id.clone(),
+            },
+            Row {
+                key: "Software Version 0",
+                value: veip0.ont_software_version0.clone(),
+            },
+            Row {
+                key: "Software Version 1",
+                value: veip0.ont_software_version1.clone(),
+            },
         ],
-    )];
+    }];
 
     format_output(&sections)
 }
