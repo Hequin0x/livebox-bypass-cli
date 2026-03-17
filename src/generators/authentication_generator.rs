@@ -3,16 +3,15 @@ use rand::TryRng;
 
 use crate::formatters::hex_formatter::{add_separators, to_1_byte_hex, to_1_byte_hex_length, to_hex};
 
+pub static AUTH_PREFIX: &str =
+    "00:00:00:00:00:00:00:00:00:00:00:1A:09:00:00:05:58:01:03:41:01:";
+
 #[derive(Debug, Clone)]
-pub struct AuthenticationGenerator {
-    prefix: String,
-}
+pub struct AuthenticationGenerator;
 
 impl AuthenticationGenerator {
-    pub fn new(prefix: impl Into<String>) -> Self {
-        Self {
-            prefix: prefix.into(),
-        }
+    pub fn new() -> Self {
+        Self
     }
 
     pub fn generate_authentication(&self, login: &str, password: &str) -> Result<String> {
@@ -46,7 +45,7 @@ impl AuthenticationGenerator {
 
         Ok(format!(
             "{}{}",
-            self.prefix,
+            AUTH_PREFIX,
             add_separators(&payload).to_uppercase()
         ))
     }

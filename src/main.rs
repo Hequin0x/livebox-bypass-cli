@@ -10,7 +10,6 @@ fn main() -> Result<()> {
 
     let config = Config {
         livebox_api_url: cli.livebox_api_url.clone(),
-        auth_prefix: cli.auth_prefix.clone(),
     };
 
     match cli.command {

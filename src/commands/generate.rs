@@ -22,7 +22,7 @@ pub fn run_generate(command: GenerateCommands, config: &Config) -> Result<()> {
         }
         GenerateCommands::Authentication { login, password } => {
             let password = resolve_password(password, "Orange password")?;
-            let generator = AuthenticationGenerator::new(&config.auth_prefix);
+            let generator = AuthenticationGenerator::new();
             let authentication = generator.generate_authentication(&login, &password)?;
             print!("{}", render_authentication(&authentication));
         }
