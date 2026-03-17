@@ -18,7 +18,7 @@ fn rejects_empty_login() {
         .generate_authentication_with_random("", "password", "4682b8985d10791c")
         .unwrap_err();
 
-    assert!(error.to_string().contains("login and password must be provided"));
+    assert!(error.to_string().contains("Login and password must be provided"));
 }
 
 #[test]
@@ -28,5 +28,5 @@ fn rejects_empty_password() {
         .generate_authentication_with_random("fti/test", "", "4682b8985d10791c")
         .unwrap_err();
 
-    assert!(error.to_string().contains("login and password must be provided"));
+    assert!(error.to_string().contains("Login and password must be provided"));
 }
