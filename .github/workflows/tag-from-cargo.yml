@@ -1,0 +1,76 @@
+---
+name: Auto Tag From Cargo.toml
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-tag-main
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    runs-on: ubuntu-24.04
+
+    outputs:
+      created: ${{ steps.set_outputs.outputs.created }}
+      tag: ${{ steps.set_outputs.outputs.tag }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Read version from Cargo.toml
+        id: cargo
+        shell: bash
+        run: |
+          version="$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)"
+          if [ -z "$version" ]; then
+            echo "Could not parse version from Cargo.toml"
+            exit 1
+          fi
+
+          # Keep plain X.Y.Z so it matches your current release trigger: '*.*.*'
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Check if tag already exists
+        id: exists
+        shell: bash
+        run: |
+          if git rev-parse "refs/tags/${{ steps.cargo.outputs.tag }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create and push tag
+        if: steps.exists.outputs.exists == 'false'
+        shell: bash
+        run: |
+          git tag -a "${{ steps.cargo.outputs.tag }}" -m "Release ${{ steps.cargo.outputs.tag }}"
+          git push origin "${{ steps.cargo.outputs.tag }}"
+
+      - name: Set final outputs
+        id: set_outputs
+        shell: bash
+        run: |
+          echo "tag=${{ steps.cargo.outputs.tag }}" >> "$GITHUB_OUTPUT"
+          if [ "${{ steps.exists.outputs.exists }}" = "false" ]; then
+            echo "created=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "created=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  release:
+    needs: tag
+    if: needs.tag.outputs.created == 'true'
+    uses: ./.github/workflows/build-release.yml
+    with:
+      tag: ${{ needs.tag.outputs.tag }}
