@@ -23,14 +23,17 @@ pub enum Commands {
 
 #[derive(Debug, Subcommand)]
 pub enum GenerateCommands {
+    #[command(about = "Generate DHCP options from Livebox MIBs")]
     Dhcp {
         #[arg(short = 'p', long = "password", required = true, num_args = 0..=1)]
         password: Option<String>,
     },
+    #[command(about = "Generate GPON settings from Livebox MIBs")]
     Gpon {
         #[arg(short = 'p', long = "password", required = true, num_args = 0..=1)]
         password: Option<String>,
     },
+    #[command(about = "Generate authentication string from login + Orange password")]
     Authentication {
         #[arg(short = 'l', long = "login", required = true)]
         login: String,

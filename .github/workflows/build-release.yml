@@ -1,0 +1,99 @@
+---
+name: Build and Release
+
+on:
+  push:
+    tags: ['*.*.*']
+
+env:
+  BUILD_FILE_NAME: livebox-bypass-cli
+
+permissions: {}
+
+jobs:
+  build:
+    name: Build - ${{ matrix.platform.target }}
+    runs-on: ${{ matrix.platform.os }}
+
+    permissions:
+      contents: read
+
+    strategy:
+      matrix:
+        platform:
+          - os: ubuntu-24.04
+            target: x86_64-unknown-linux-musl
+            package: ${{ env.BUILD_FILE_NAME }}-Linux-x86_64.tar.gz
+
+          - os: ubuntu-24.04
+            target: aarch64-unknown-linux-musl
+            package: ${{ env.BUILD_FILE_NAME }}-Linux-aarch64.tar.gz
+
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            package: ${{ env.BUILD_FILE_NAME }}-Windows-x86_64.zip
+
+          - os: macOS-26
+            target: aarch64-apple-darwin
+            package: ${{ env.BUILD_FILE_NAME }}-macOS-aarch64.tar.gz
+
+          - os: macOS-26-intel
+            target: x86_64-apple-darwin
+            package: ${{ env.BUILD_FILE_NAME }}-macOS-x86_64.tar.gz
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build binary
+        uses: houseabsolute/actions-rust-cross@v1
+        with:
+          command: build
+          target: ${{ matrix.platform.target }}
+          args: "--locked --release"
+          strip: true
+
+      - name: Package binary (linux and macos)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p dist
+          cp target/${{ matrix.platform.target }}/release/${{ env.BUILD_FILE_NAME }} dist/${{ env.BUILD_FILE_NAME }}
+          tar -C dist -czf dist/${{ matrix.platform.package }} ${{ env.BUILD_FILE_NAME }}
+          rm dist/${{ env.BUILD_FILE_NAME }}
+
+      - name: Package binary (windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path dist -Force | Out-Null
+          Copy-Item "target/${{ matrix.platform.target }}/release/${{ env.BUILD_FILE_NAME }}.exe" "dist/${{ env.BUILD_FILE_NAME }}.exe"
+          Compress-Archive -Path "dist/${{ env.BUILD_FILE_NAME }}.exe" -DestinationPath "dist/${{ matrix.platform.package }}" -Force
+          Remove-Item "dist/${{ env.BUILD_FILE_NAME }}.exe"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.platform.target }}
+          path: dist/${{ matrix.platform.package }}
+          if-no-files-found: error
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-24.04
+    needs: build
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Publish release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          fail_on_unmatched_files: true
+          generate_release_notes: true
