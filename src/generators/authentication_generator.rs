@@ -46,13 +46,13 @@ impl AuthenticationGenerator {
         ))
     }
 
-    pub fn generate_random(&self) -> Result<String> {
+    fn generate_random(&self) -> Result<String> {
         let mut bytes = [0u8; 1024];
         rand::rngs::SysRng.try_fill_bytes(&mut bytes)?;
         Ok(self.compute_digest(&bytes)[0..16].to_string())
     }
 
-    pub fn compute_digest(&self, data: &[u8]) -> String {
+    fn compute_digest(&self, data: &[u8]) -> String {
         format!("{:x}", md5::compute(data))
     }
 
