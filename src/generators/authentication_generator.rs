@@ -6,14 +6,10 @@ use crate::formatters::hex_formatter::{add_separators, to_1_byte_hex, to_1_byte_
 pub static AUTH_PREFIX: &str =
     "00:00:00:00:00:00:00:00:00:00:00:1A:09:00:00:05:58:01:03:41:01:";
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct AuthenticationGenerator;
 
 impl AuthenticationGenerator {
-    pub fn new() -> Self {
-        Self
-    }
-
     pub fn generate_authentication(&self, login: &str, password: &str) -> Result<String> {
         self.generate_authentication_with_random(login, password, &self.generate_random()?)
     }

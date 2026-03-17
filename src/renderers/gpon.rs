@@ -1,7 +1,9 @@
+use anyhow::Result;
+
 use crate::api::models::MibsResponse;
 use crate::formatters::output_formatter::{format_output, Row, Section};
 
-pub fn render_gpon(mibs: &MibsResponse) -> String {
+pub fn render_gpon(mibs: &MibsResponse) -> Result<String> {
     let veip0 = &mibs.status.gpon.veip0;
 
     let sections = vec![Section {
@@ -30,5 +32,5 @@ pub fn render_gpon(mibs: &MibsResponse) -> String {
         ],
     }];
 
-    format_output(&sections)
+    Ok(format_output(&sections))
 }

@@ -11,23 +11,29 @@ use crate::renderers::{render_authentication, render_dhcp, render_gpon};
 pub fn run_generate(command: GenerateCommands, config: &Config) -> Result<()> {
     match command {
         GenerateCommands::Dhcp { password } => {
-            let password = resolve_password(password, "Livebox admin password")?;
-            let mibs = fetch_mibs(&password, config)?;
-            print!("{}", render_dhcp(&mibs)?);
+            run_mibs_command(password, config, render_dhcp)?;
         }
         GenerateCommands::Gpon { password } => {
-            let password = resolve_password(password, "Livebox admin password")?;
-            let mibs = fetch_mibs(&password, config)?;
-            print!("{}", render_gpon(&mibs));
+            run_mibs_command(password, config, render_gpon)?;
         }
         GenerateCommands::Authentication { login, password } => {
             let password = resolve_password(password, "Orange password")?;
-            let generator = AuthenticationGenerator::new();
+            let generator = AuthenticationGenerator;
             let authentication = generator.generate_authentication(&login, &password)?;
             print!("{}", render_authentication(&authentication));
         }
     }
 
+    Ok(())
+}
+
+fn run_mibs_command<F>(password: Option<String>, config: &Config, render: F) -> Result<()>
+where
+    F: FnOnce(&MibsResponse) -> Result<String>,
+{
+    let password = resolve_password(password, "Livebox admin password")?;
+    let mibs = fetch_mibs(&password, config)?;
+    print!("{}", render(&mibs)?);
     Ok(())
 }
 

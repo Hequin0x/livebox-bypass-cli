@@ -68,7 +68,7 @@ impl LiveboxClient {
             .header(CONTENT_TYPE, SAH_CONTENT_TYPE)
             .header("X-Context", &session.context_id)
             .header(COOKIE, &session.cookie)
-            .json(&MibsRequest::new())
+            .json(&MibsRequest::default())
             .send()
             .context("failed to send MIBs request")?;
 

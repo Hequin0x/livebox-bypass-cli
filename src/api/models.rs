@@ -39,8 +39,8 @@ pub struct MibsRequest {
 #[derive(Debug, Default, Serialize)]
 pub struct EmptyParameters {}
 
-impl MibsRequest {
-    pub fn new() -> Self {
+impl Default for MibsRequest {
+    fn default() -> Self {
         Self {
             service: "NeMo.Intf.data",
             method: "getMIBs",

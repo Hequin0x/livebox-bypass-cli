@@ -2,7 +2,7 @@ use livebox_bypass_cli::generators::authentication_generator::{AuthenticationGen
 
 #[test]
 fn generates_expected_authentication() {
-    let generator = AuthenticationGenerator::new();
+    let generator = AuthenticationGenerator;
     let actual = generator
         .generate_authentication_with_random("fti/xxxxxxx", "xxxxxxx", "4682b8985d10791c")
         .unwrap();
@@ -13,7 +13,7 @@ fn generates_expected_authentication() {
 
 #[test]
 fn rejects_empty_login() {
-    let generator = AuthenticationGenerator::new();
+    let generator = AuthenticationGenerator;
     let error = generator
         .generate_authentication_with_random("", "password", "4682b8985d10791c")
         .unwrap_err();
@@ -23,7 +23,7 @@ fn rejects_empty_login() {
 
 #[test]
 fn rejects_empty_password() {
-    let generator = AuthenticationGenerator::new();
+    let generator = AuthenticationGenerator;
     let error = generator
         .generate_authentication_with_random("fti/test", "", "4682b8985d10791c")
         .unwrap_err();

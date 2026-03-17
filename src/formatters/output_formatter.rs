@@ -1,6 +1,5 @@
-use std::io::{self, IsTerminal};
-
 use owo_colors::OwoColorize;
+use std::io::{self, IsTerminal};
 
 #[derive(Debug, Clone)]
 pub struct Row<'a> {
