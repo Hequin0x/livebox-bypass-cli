@@ -29,6 +29,10 @@ jobs:
             target: aarch64-unknown-linux-musl
             package: livebox-bypass-cli-Linux-aarch64.tar.gz
 
+          - os: windows-11-arm
+            target: aarch64-pc-windows-msvc
+            package: livebox-bypass-cli-Windows-aarch64.zip
+
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             package: livebox-bypass-cli-Windows-x86_64.zip
