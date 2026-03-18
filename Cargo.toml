@@ -18,6 +18,10 @@ rand = "0.10"
 reqwest = { version = "0.13", default-features = false, features = ["blocking", "json"] }
 serde = { version = "1.0", features = ["derive"] }
 url = "2.5"
+shadow-rs = { version = "1.7", default-features = false }
+
+[build-dependencies]
+shadow-rs = "1.7"
 
 [dev-dependencies]
 mockito = "1.7"
