@@ -1,11 +1,14 @@
 use clap::{Parser, Subcommand};
+use shadow_rs::shadow;
 use url::Url;
 
 use crate::config::DEFAULT_LIVEBOX_API_URL;
 
+shadow!(build);
+
 /// Generate DHCP and GPON configuration for bypassing Orange Livebox
 #[derive(Debug, Parser)]
-#[command(version, about)]
+#[command(version, long_version = build::CLAP_LONG_VERSION, about)]
 pub struct Cli {
     #[arg(long, env = "LIVEBOX_API_URL", default_value = DEFAULT_LIVEBOX_API_URL)]
     pub livebox_api_url: Url,
