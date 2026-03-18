@@ -22,7 +22,7 @@
 A command-line tool to generate the required DHCP and GPON/XGS-PON configurations for bypassing Orange Livebox.
 
 ## How it works
-This tool uses the Livebox API to retrieve the necessary information and outputs ready-to-use DHCP (v4/v6) and GPON settings for third-party routers.
+This tool uses the Livebox API to retrieve the necessary information and outputs ready-to-use DHCPv4/v6 and GPON settings for third-party routers.
 
 ## Getting started
 
@@ -30,9 +30,9 @@ This tool uses the Livebox API to retrieve the necessary information and outputs
 
 ### Available platforms
 
-- **Linux** (x86_64 / aarch64)
-- **macOS** (x86_64 / aarch64 (Silicon))
-- **Windows** (x86_64)
+![Linux](https://img.shields.io/badge/Linux-x86__64_%2F_aarch64-E95420?logo=linux&logoColor=white&style=for-the-badge)
+![macOS](https://img.shields.io/badge/macOS-x86__64_%2F_aarch64-3A3A3A?logo=apple&logoColor=white&style=for-the-badge)
+![Windows](https://img.shields.io/badge/Windows-x86__64_%2F_aarch64-0078D6?style=for-the-badge)
 
 ## Usage
 
