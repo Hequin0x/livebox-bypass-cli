@@ -5,7 +5,7 @@ use crate::api::livebox_client::LiveboxClient;
 use crate::api::models::MibsResponse;
 use crate::cli::GenerateCommands;
 use crate::config::Config;
-use crate::generators::authentication_generator::AuthenticationGenerator;
+use crate::generators::authentication_generator::generate_authentication;
 use crate::renderers::{render_authentication, render_dhcp, render_gpon};
 
 pub fn run_generate(command: GenerateCommands, config: &Config) -> Result<()> {
@@ -18,8 +18,7 @@ pub fn run_generate(command: GenerateCommands, config: &Config) -> Result<()> {
         }
         GenerateCommands::Authentication { login, password } => {
             let password = resolve_password(password, "Orange password")?;
-            let generator = AuthenticationGenerator;
-            let authentication = generator.generate_authentication(&login, &password)?;
+            let authentication = generate_authentication(&login, &password)?;
             print!("{}", render_authentication(&authentication));
         }
     }

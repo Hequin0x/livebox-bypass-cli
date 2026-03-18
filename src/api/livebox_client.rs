@@ -1,8 +1,8 @@
 use std::time::Duration;
 
-use anyhow::{anyhow, bail, Context, Result};
+use anyhow::{Context, Result, anyhow, bail};
 use reqwest::blocking::Client;
-use reqwest::header::{HeaderValue, AUTHORIZATION, CONTENT_TYPE, COOKIE};
+use reqwest::header::{AUTHORIZATION, CONTENT_TYPE, COOKIE, HeaderValue};
 use url::Url;
 
 use crate::api::models::{LoginRequest, LoginResponse, MibsRequest, MibsResponse};
@@ -53,7 +53,8 @@ impl LiveboxClient {
             .to_str()?
             .to_string();
 
-        let login_response: LoginResponse = response.json().context("invalid login response JSON")?;
+        let login_response: LoginResponse =
+            response.json().context("invalid login response JSON")?;
 
         Ok(AuthSession {
             context_id: login_response.data.context_id,

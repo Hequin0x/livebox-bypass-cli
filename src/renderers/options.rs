@@ -14,12 +14,9 @@ pub fn option60_dhcpv6_value(option: &Option60) -> String {
 
     format!(
         "{}{}{}{}",
-        iana_enterprise_number_hex,
-        sagem_enterprise_number_hex,
-        value_length_hex,
-        option.value
+        iana_enterprise_number_hex, sagem_enterprise_number_hex, value_length_hex, option.value
     )
-        .to_uppercase()
+    .to_uppercase()
 }
 
 pub fn option61_dhcpv4_value(option: &Option61) -> String {
@@ -31,7 +28,10 @@ pub fn option61_dhcpv6_value(option: &Option61) -> String {
     let hardware_type_ethernet_hex = to_2_bytes_hex(1);
     let value = &option.value[2..];
 
-    add_separators(&format!("{duid_type_hex}{hardware_type_ethernet_hex}{value}")).to_uppercase()
+    add_separators(&format!(
+        "{duid_type_hex}{hardware_type_ethernet_hex}{value}"
+    ))
+    .to_uppercase()
 }
 
 pub fn option77_value(option: &Option77) -> Result<String> {
