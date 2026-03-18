@@ -1,7 +1,7 @@
 use anyhow::Result;
 
 use crate::api::models::MibsResponse;
-use crate::formatters::output_formatter::{format_output, Row, Section};
+use crate::formatters::output_formatter::{Row, Section, format_output};
 
 use super::options::{
     option60_dhcpv4_value, option60_dhcpv6_value, option61_dhcpv4_value, option61_dhcpv6_value,

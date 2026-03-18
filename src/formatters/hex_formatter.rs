@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 
 pub fn add_separators(data: &str) -> String {
     data.as_bytes()

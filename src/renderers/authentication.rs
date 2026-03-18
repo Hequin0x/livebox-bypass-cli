@@ -1,4 +1,4 @@
-use crate::formatters::output_formatter::{format_output, Row, Section};
+use crate::formatters::output_formatter::{Row, Section, format_output};
 
 pub fn render_authentication(authentication: &str) -> String {
     let dhcpv6_authentication = authentication.replace(':', "");
