@@ -30,9 +30,9 @@ This tool uses the Livebox API to retrieve the necessary information and outputs
 
 ### Available platforms
 
-![Linux](https://img.shields.io/badge/Linux-x86__64_%2F_aarch64-E95420?logo=linux&logoColor=white&style=for-the-badge)
-![macOS](https://img.shields.io/badge/macOS-x86__64_%2F_aarch64-3A3A3A?logo=apple&logoColor=white&style=for-the-badge)
-![Windows](https://img.shields.io/badge/Windows-x86__64_%2F_aarch64-0078D6?style=for-the-badge)
+![Linux](https://img.shields.io/badge/Linux-x86__64_%2F_aarch64-E95420?logo=linux&logoColor=white&style=flat-square)
+![macOS](https://img.shields.io/badge/macOS-x86__64_%2F_aarch64-3A3A3A?logo=apple&logoColor=white&style=flat-square)
+![Windows](https://img.shields.io/badge/Windows-x86__64_%2F_aarch64-0078D6?style=flat-square)
 
 ## Usage
 

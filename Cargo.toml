@@ -7,6 +7,10 @@ authors = ["Hequin0x"]
 license = "GPL-3.0"
 repository = "https://github.com/Hequin0x/livebox-bypass-cli"
 
+[profile.release]
+strip = "symbols"
+lto = true
+
 [dependencies]
 anyhow = "1.0"
 clap = { version = "4.6", features = ["derive", "env"] }
