@@ -32,5 +32,5 @@ pub fn render_gpon(mibs: &MibsResponse) -> Result<String> {
         ],
     }];
 
-    Ok(format_output(&sections))
+    format_output(&sections)
 }

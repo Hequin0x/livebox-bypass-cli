@@ -72,5 +72,5 @@ pub fn render_dhcp(mibs: &MibsResponse) -> Result<String> {
         },
     ];
 
-    Ok(format_output(&sections))
+    format_output(&sections)
 }

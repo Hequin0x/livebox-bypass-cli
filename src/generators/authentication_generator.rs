@@ -7,28 +7,29 @@ use crate::formatters::hex_formatter::{
 
 pub const AUTH_PREFIX: &str = "00:00:00:00:00:00:00:00:00:00:00:1A:09:00:00:05:58:01:03:41:01:";
 
-pub fn generate_authentication(login: &str, password: &str) -> Result<String> {
-    generate_authentication_with_random(login, password, &generate_random()?)
-}
-
-pub fn generate_authentication_with_random(
+pub fn generate_authentication(
     login: &str,
     password: &str,
-    random: &str,
+    salt: Option<&str>,
 ) -> Result<String> {
     if login.trim().is_empty() || password.trim().is_empty() {
         bail!("Login and password must be provided");
     }
 
-    let id = &random[0..1];
+    let salt = match salt {
+        Some(value) => value.to_owned(),
+        None => generate_salt()?,
+    };
 
-    let random_hex = to_hex(random.as_bytes());
+    let id = &salt[0..1];
+
+    let salt_hex = to_hex(salt.as_bytes());
     let id_hex = to_hex(id.as_bytes());
 
-    let digest_input = format!("{id}{password}{random}");
+    let digest_input = format!("{id}{password}{salt}");
     let digest = compute_digest(digest_input.as_bytes());
 
-    let auth_chain = build_authentication_chain(&random_hex, &id_hex, &digest);
+    let auth_chain = build_authentication_chain(&salt_hex, &id_hex, &digest);
 
     let login_hex = to_hex(login.as_bytes());
     let login_payload = format!("{}{}", to_1_byte_hex_length(&login_hex), login_hex);
@@ -42,7 +43,7 @@ pub fn generate_authentication_with_random(
     ))
 }
 
-fn generate_random() -> Result<String> {
+fn generate_salt() -> Result<String> {
     let mut bytes = [0u8; 1024];
     rand::rngs::SysRng.try_fill_bytes(&mut bytes)?;
     Ok(compute_digest(&bytes)[0..16].to_string())

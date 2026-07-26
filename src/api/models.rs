@@ -16,7 +16,8 @@ pub struct LoginParameters {
 }
 
 impl LoginRequest {
-    pub fn new(password: String) -> Self {
+    #[must_use]
+    pub const fn new(password: String) -> Self {
         Self {
             service: "sah.Device.Information",
             method: "createContext",

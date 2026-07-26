@@ -1,5 +1,6 @@
 use anyhow::{Result, anyhow};
 
+#[must_use]
 pub fn add_separators(data: &str) -> String {
     data.as_bytes()
         .chunks(2)
@@ -8,14 +9,17 @@ pub fn add_separators(data: &str) -> String {
         .join(":")
 }
 
+#[must_use]
 pub fn to_1_byte_hex(data: usize) -> String {
     format!("{data:02x}")
 }
 
+#[must_use]
 pub fn to_1_byte_hex_length(data: &str) -> String {
     to_1_byte_hex((data.len() / 2) + 2)
 }
 
+#[must_use]
 pub fn to_2_bytes_hex(data: usize) -> String {
     format!("{data:04x}")
 }
@@ -25,6 +29,7 @@ pub fn parse_hex(data: &str) -> Result<String> {
     Ok(String::from_utf8_lossy(&bytes).to_string())
 }
 
+#[must_use]
 pub fn to_hex(data: &[u8]) -> String {
     hex::encode(data)
 }
