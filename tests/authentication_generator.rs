@@ -34,3 +34,13 @@ fn rejects_empty_password() {
             .contains("Login and password must be provided")
     );
 }
+
+#[test]
+fn generates_salt_when_not_provided() {
+    let result = generate_authentication("fti/test", "password", None);
+    
+    assert!(result.is_ok());
+    let authentication = result.unwrap();
+    assert!(authentication.starts_with(AUTH_PREFIX));
+}
+
