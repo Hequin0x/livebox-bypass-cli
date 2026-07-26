@@ -1,7 +1,7 @@
 use anyhow::Result;
 
 use crate::api::models::MibsResponse;
-use crate::formatters::output_formatter::{Row, Section, format_output};
+use crate::renderers::output::{Row, Section, format_output};
 
 pub fn render_gpon(mibs: &MibsResponse) -> Result<String> {
     let veip0 = &mibs.status.gpon.veip0;

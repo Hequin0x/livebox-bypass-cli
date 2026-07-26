@@ -1,7 +1,7 @@
 use anyhow::Result;
 
 use crate::api::models::MibsResponse;
-use crate::formatters::output_formatter::{Row, Section, format_output};
+use crate::renderers::output::{Row, Section, format_output};
 
 pub fn render_dhcp(mibs: &MibsResponse) -> Result<String> {
     let dhcp_cos = mibs.status.dhcp.dhcp_data.priority_mark.to_string();

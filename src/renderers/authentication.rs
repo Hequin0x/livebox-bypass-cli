@@ -1,4 +1,4 @@
-use crate::formatters::output_formatter::{Row, Section, format_output};
+use crate::renderers::output::{Row, Section, format_output};
 use anyhow::Result;
 
 pub fn render_authentication(authentication: &str) -> Result<String> {

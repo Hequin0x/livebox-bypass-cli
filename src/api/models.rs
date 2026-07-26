@@ -1,4 +1,4 @@
-use crate::formatters::hex_formatter::{add_separators, parse_hex, to_2_bytes_hex};
+use crate::utils::hex::{HexExt, NumHexExt};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
@@ -162,7 +162,7 @@ impl VendorClass {
     /// # Errors
     /// Returns an error if the hexadecimal value cannot be parsed.
     pub fn dhcpv4_value(&self) -> Result<String> {
-        parse_hex(&self.value)
+        self.value.decode_hex()
     }
 
     /// Formats the vendor class identifier for DHCP Option 60 (`DHCPv6`).
@@ -171,9 +171,9 @@ impl VendorClass {
     /// and value length header to the original value, then converts to uppercase.
     #[must_use]
     pub fn dhcpv6_value(&self) -> String {
-        let iana_enterprise_number_hex = to_2_bytes_hex(0);
-        let sagem_enterprise_number_hex = to_2_bytes_hex(1038);
-        let value_length_hex = to_2_bytes_hex(self.value.len() / 2);
+        let iana_enterprise_number_hex = 0usize.to_2_bytes_hex();
+        let sagem_enterprise_number_hex = 1038usize.to_2_bytes_hex();
+        let value_length_hex = (self.value.len() / 2).to_2_bytes_hex();
 
         format!(
             "{}{}{}{}",
@@ -189,7 +189,7 @@ impl ClientIdentifier {
     /// Adds separators to the hexadecimal value (excluding the first two characters) and converts to uppercase.
     #[must_use]
     pub fn dhcpv4_value(&self) -> String {
-        add_separators(&self.value[2..]).to_uppercase()
+        self.value[2..].colon_separated().to_uppercase()
     }
 
     /// Formats the DHCP Unique Identifier (DUID) for DHCP Option 61 (`DHCPv6`).
@@ -198,14 +198,13 @@ impl ClientIdentifier {
     /// then adds separators and converts to uppercase.
     #[must_use]
     pub fn dhcpv6_value(&self) -> String {
-        let duid_type_hex = to_2_bytes_hex(3);
-        let hardware_type_ethernet_hex = to_2_bytes_hex(1);
+        let duid_type_hex = 3usize.to_2_bytes_hex();
+        let hardware_type_ethernet_hex = 1usize.to_2_bytes_hex();
         let value = &self.value[2..];
 
-        add_separators(&format!(
-            "{duid_type_hex}{hardware_type_ethernet_hex}{value}"
-        ))
-        .to_uppercase()
+        format!("{duid_type_hex}{hardware_type_ethernet_hex}{value}")
+            .colon_separated()
+            .to_uppercase()
     }
 }
 
@@ -217,7 +216,7 @@ impl UserClass {
     /// # Errors
     /// Returns an error if the hexadecimal value cannot be parsed.
     pub fn dhcp_value(&self) -> Result<String> {
-        let decoded = parse_hex(&self.value)?;
+        let decoded = self.value.decode_hex()?;
         Ok(decoded.chars().skip(1).collect())
     }
 }
@@ -228,7 +227,7 @@ impl Authentication {
     /// Adds separators to the `DHCPv6` formatted value.
     #[must_use]
     pub fn dhcpv4_value(&self) -> String {
-        add_separators(&self.dhcpv6_value())
+        self.dhcpv6_value().colon_separated()
     }
 
     /// Formats the authentication information for DHCP Option 90 (`DHCPv6`).
