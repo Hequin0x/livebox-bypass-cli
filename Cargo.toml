@@ -1,6 +1,6 @@
 [package]
 name = "livebox-bypass-cli"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2024"
 description = "Generate DHCP and GPON configuration for bypassing Orange Livebox"
 authors = ["Hequin0x"]
