@@ -39,6 +39,8 @@ pub enum GenerateCommands {
     },
     /// Generate DHCPv4/v6 authentication string from Orange login (fti/xxx) and password
     Authentication {
+        #[arg(short = 's', long = "salt")]
+        salt: Option<String>,
         #[arg(short = 'l', long = "login", required = true)]
         login: String,
         #[arg(short = 'p', long = "password", required = true, num_args = 0..=1)]

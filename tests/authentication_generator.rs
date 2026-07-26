@@ -1,11 +1,11 @@
 use livebox_bypass_cli::generators::authentication_generator::{
-    AUTH_PREFIX, generate_authentication_with_random,
+    AUTH_PREFIX, generate_authentication,
 };
 
 #[test]
 fn generates_expected_authentication() {
     let actual =
-        generate_authentication_with_random("fti/xxxxxxx", "xxxxxxx", "4682b8985d10791c").unwrap();
+        generate_authentication("fti/xxxxxxx", "xxxxxxx", Some("4682b8985d10791c")).unwrap();
 
     let expected_suffix = "0D:66:74:69:2F:78:78:78:78:78:78:78:3C:12:34:36:38:32:62:38:39:38:35:64:31:30:37:39:31:63:03:13:34:B5:A2:94:FB:AE:B7:68:0C:04:E7:38:E9:B3:49:F3:3F";
     assert_eq!(actual, format!("{AUTH_PREFIX}{expected_suffix}"));
@@ -14,7 +14,7 @@ fn generates_expected_authentication() {
 #[test]
 fn rejects_empty_login() {
     let error =
-        generate_authentication_with_random("", "password", "4682b8985d10791c").unwrap_err();
+        generate_authentication("", "password", Some("4682b8985d10791c")).unwrap_err();
 
     assert!(
         error
@@ -26,7 +26,7 @@ fn rejects_empty_login() {
 #[test]
 fn rejects_empty_password() {
     let error =
-        generate_authentication_with_random("fti/test", "", "4682b8985d10791c").unwrap_err();
+        generate_authentication("fti/test", "", Some("4682b8985d10791c")).unwrap_err();
 
     assert!(
         error
