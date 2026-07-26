@@ -3,11 +3,6 @@ use anyhow::Result;
 use crate::api::models::MibsResponse;
 use crate::formatters::output_formatter::{Row, Section, format_output};
 
-use super::options::{
-    option60_dhcpv4_value, option60_dhcpv6_value, option61_dhcpv4_value, option61_dhcpv6_value,
-    option77_value, option90_dhcpv4_value, option90_dhcpv6_value,
-};
-
 pub fn render_dhcp(mibs: &MibsResponse) -> Result<String> {
     let dhcp_cos = mibs.status.dhcp.dhcp_data.priority_mark.to_string();
     let wan_vlan_id = mibs.status.vlan.gvlan_multi.vlan_id.to_string();
@@ -33,19 +28,19 @@ pub fn render_dhcp(mibs: &MibsResponse) -> Result<String> {
             rows: vec![
                 Row {
                     key: "60",
-                    value: option60_dhcpv4_value(&sent.option60)?,
+                    value: sent.vendor_class.dhcpv4_value()?,
                 },
                 Row {
                     key: "61",
-                    value: option61_dhcpv4_value(&sent.option61),
+                    value: sent.client_identifier.dhcpv4_value(),
                 },
                 Row {
                     key: "77",
-                    value: option77_value(&sent.option77)?,
+                    value: sent.user_class.dhcp_value()?,
                 },
                 Row {
                     key: "90",
-                    value: option90_dhcpv4_value(&sent.option90),
+                    value: sent.authentication.dhcpv4_value(),
                 },
             ],
         },
@@ -54,19 +49,19 @@ pub fn render_dhcp(mibs: &MibsResponse) -> Result<String> {
             rows: vec![
                 Row {
                     key: "16",
-                    value: option60_dhcpv6_value(&sent.option60),
+                    value: sent.vendor_class.dhcpv6_value(),
                 },
                 Row {
                     key: "1",
-                    value: option61_dhcpv6_value(&sent.option61),
+                    value: sent.client_identifier.dhcpv6_value(),
                 },
                 Row {
                     key: "15",
-                    value: option77_value(&sent.option77)?,
+                    value: sent.user_class.dhcp_value()?,
                 },
                 Row {
                     key: "11",
-                    value: option90_dhcpv6_value(&sent.option90),
+                    value: sent.authentication.dhcpv6_value(),
                 },
             ],
         },

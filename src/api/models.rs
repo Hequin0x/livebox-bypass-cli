@@ -1,3 +1,5 @@
+use crate::formatters::hex_formatter::{add_separators, parse_hex, to_2_bytes_hex};
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize)]
@@ -90,35 +92,35 @@ pub struct DhcpData {
 #[derive(Debug, Deserialize)]
 pub struct SentOption {
     #[serde(rename = "60")]
-    pub option60: Option60,
+    pub vendor_class: VendorClass,
     #[serde(rename = "61")]
-    pub option61: Option61,
+    pub client_identifier: ClientIdentifier,
     #[serde(rename = "77")]
-    pub option77: Option77,
+    pub user_class: UserClass,
     #[serde(rename = "90")]
-    pub option90: Option90,
+    pub authentication: Authentication,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Option60 {
+pub struct VendorClass {
     #[serde(rename = "Value")]
     pub value: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Option61 {
+pub struct ClientIdentifier {
     #[serde(rename = "Value")]
     pub value: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Option77 {
+pub struct UserClass {
     #[serde(rename = "Value")]
     pub value: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Option90 {
+pub struct Authentication {
     #[serde(rename = "Value")]
     pub value: String,
 }
@@ -152,4 +154,88 @@ pub struct Vlan {
 pub struct GvlanMulti {
     #[serde(rename = "VLANID")]
     pub vlan_id: u16,
+}
+
+impl VendorClass {
+    /// Decodes the vendor class identifier from DHCP Option 60 (`DHCPv4`).
+    ///
+    /// # Errors
+    /// Returns an error if the hexadecimal value cannot be parsed.
+    pub fn dhcpv4_value(&self) -> Result<String> {
+        parse_hex(&self.value)
+    }
+
+    /// Formats the vendor class identifier for DHCP Option 60 (`DHCPv6`).
+    ///
+    /// Prepends the IANA enterprise number (0), Sagem enterprise number (1038),
+    /// and value length header to the original value, then converts to uppercase.
+    #[must_use]
+    pub fn dhcpv6_value(&self) -> String {
+        let iana_enterprise_number_hex = to_2_bytes_hex(0);
+        let sagem_enterprise_number_hex = to_2_bytes_hex(1038);
+        let value_length_hex = to_2_bytes_hex(self.value.len() / 2);
+
+        format!(
+            "{}{}{}{}",
+            iana_enterprise_number_hex, sagem_enterprise_number_hex, value_length_hex, self.value
+        )
+        .to_uppercase()
+    }
+}
+
+impl ClientIdentifier {
+    /// Formats the client identifier for DHCP Option 61 (`DHCPv4`).
+    ///
+    /// Adds separators to the hexadecimal value (excluding the first two characters) and converts to uppercase.
+    #[must_use]
+    pub fn dhcpv4_value(&self) -> String {
+        add_separators(&self.value[2..]).to_uppercase()
+    }
+
+    /// Formats the DHCP Unique Identifier (DUID) for DHCP Option 61 (`DHCPv6`).
+    ///
+    /// Constructs a DUID with type 3 (DUID-LL) and Ethernet hardware type (1),
+    /// then adds separators and converts to uppercase.
+    #[must_use]
+    pub fn dhcpv6_value(&self) -> String {
+        let duid_type_hex = to_2_bytes_hex(3);
+        let hardware_type_ethernet_hex = to_2_bytes_hex(1);
+        let value = &self.value[2..];
+
+        add_separators(&format!(
+            "{duid_type_hex}{hardware_type_ethernet_hex}{value}"
+        ))
+        .to_uppercase()
+    }
+}
+
+impl UserClass {
+    /// Decodes and extracts the user class data from DHCP Option 77.
+    ///
+    /// Parses the hexadecimal value and returns the decoded string with the first character removed.
+    ///
+    /// # Errors
+    /// Returns an error if the hexadecimal value cannot be parsed.
+    pub fn dhcp_value(&self) -> Result<String> {
+        let decoded = parse_hex(&self.value)?;
+        Ok(decoded.chars().skip(1).collect())
+    }
+}
+
+impl Authentication {
+    /// Formats the authentication information for DHCP Option 90 (`DHCPv4`).
+    ///
+    /// Adds separators to the `DHCPv6` formatted value.
+    #[must_use]
+    pub fn dhcpv4_value(&self) -> String {
+        add_separators(&self.dhcpv6_value())
+    }
+
+    /// Formats the authentication information for DHCP Option 90 (`DHCPv6`).
+    ///
+    /// Converts the value to uppercase hexadecimal.
+    #[must_use]
+    pub fn dhcpv6_value(&self) -> String {
+        self.value.to_uppercase()
+    }
 }

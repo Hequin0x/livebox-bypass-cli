@@ -16,7 +16,11 @@ pub fn run_generate(command: GenerateCommands, config: &Config) -> Result<()> {
         GenerateCommands::Gpon { password } => {
             run_mibs_command(password, config, render_gpon)?;
         }
-        GenerateCommands::Authentication { login, password, salt } => {
+        GenerateCommands::Authentication {
+            login,
+            password,
+            salt,
+        } => {
             let password = resolve_password(password, "Orange password")?;
             let authentication = generate_authentication(&login, &password, salt.as_deref())?;
             print!("{}", render_authentication(&authentication)?);
