@@ -64,6 +64,8 @@ You can provide credentials using:
     - `dhcp`
         - Generate DHCPv4/v6 options from Livebox MIBs
             - Requires authentication.
+            - Input:
+              - `-p` `--password` The Livebox admin password.
             - Output:
                 - DHCPv4/v6 options
                     - **CoS**
@@ -83,6 +85,8 @@ You can provide credentials using:
         - Generate GPON settings from Livebox MIBs
             - Requires authentication.
             - Note: **GPON** options are also valid for **XGS-PON**
+            - Input:
+              - `-p` `--password` The Livebox admin password.
             - Output:
                 - **Serial number**
                 - **Hardware version**
@@ -93,6 +97,10 @@ You can provide credentials using:
         - Generates DHCPv4/v6 Authentication with the provided login (fti/xxx) and password.
             - Requires Orange login (fti/xxx) and password, not the Livebox admin ones.
             - This command is useful in case you need to generate the authentication option but don't have access to your Livebox.
+            - Input:
+              - `-s` `--salt` _(Optional)_ The salt used to generate the authentication.
+              - `-l` `--login` The Orange login (fti/xxx) used to generate the authentication.
+              - `-p` `--password` The Orange password used to generate the authentication.
             - Output:
                 - DHCPv4 option
                     - **90** [Authentication](https://datatracker.ietf.org/doc/html/rfc3118#section-2)
