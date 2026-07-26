@@ -7,11 +7,7 @@ use crate::formatters::hex_formatter::{
 
 pub const AUTH_PREFIX: &str = "00:00:00:00:00:00:00:00:00:00:00:1A:09:00:00:05:58:01:03:41:01:";
 
-pub fn generate_authentication(
-    login: &str,
-    password: &str,
-    salt: Option<&str>,
-) -> Result<String> {
+pub fn generate_authentication(login: &str, password: &str, salt: Option<&str>) -> Result<String> {
     if login.trim().is_empty() || password.trim().is_empty() {
         bail!("Login and password must be provided");
     }

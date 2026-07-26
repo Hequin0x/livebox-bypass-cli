@@ -13,8 +13,7 @@ fn generates_expected_authentication() {
 
 #[test]
 fn rejects_empty_login() {
-    let error =
-        generate_authentication("", "password", Some("4682b8985d10791c")).unwrap_err();
+    let error = generate_authentication("", "password", Some("4682b8985d10791c")).unwrap_err();
 
     assert!(
         error
@@ -25,8 +24,7 @@ fn rejects_empty_login() {
 
 #[test]
 fn rejects_empty_password() {
-    let error =
-        generate_authentication("fti/test", "", Some("4682b8985d10791c")).unwrap_err();
+    let error = generate_authentication("fti/test", "", Some("4682b8985d10791c")).unwrap_err();
 
     assert!(
         error
@@ -38,9 +36,8 @@ fn rejects_empty_password() {
 #[test]
 fn generates_salt_when_not_provided() {
     let result = generate_authentication("fti/test", "password", None);
-    
+
     assert!(result.is_ok());
     let authentication = result.unwrap();
     assert!(authentication.starts_with(AUTH_PREFIX));
 }
-
