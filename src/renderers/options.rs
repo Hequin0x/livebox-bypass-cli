@@ -7,6 +7,7 @@ pub fn option60_dhcpv4_value(option: &Option60) -> Result<String> {
     parse_hex(&option.value)
 }
 
+#[must_use]
 pub fn option60_dhcpv6_value(option: &Option60) -> String {
     let iana_enterprise_number_hex = to_2_bytes_hex(0);
     let sagem_enterprise_number_hex = to_2_bytes_hex(1038);
@@ -19,10 +20,12 @@ pub fn option60_dhcpv6_value(option: &Option60) -> String {
     .to_uppercase()
 }
 
+#[must_use]
 pub fn option61_dhcpv4_value(option: &Option61) -> String {
     add_separators(&option.value[2..]).to_uppercase()
 }
 
+#[must_use]
 pub fn option61_dhcpv6_value(option: &Option61) -> String {
     let duid_type_hex = to_2_bytes_hex(3);
     let hardware_type_ethernet_hex = to_2_bytes_hex(1);
@@ -39,10 +42,12 @@ pub fn option77_value(option: &Option77) -> Result<String> {
     Ok(decoded.chars().skip(1).collect())
 }
 
+#[must_use]
 pub fn option90_dhcpv4_value(option: &Option90) -> String {
     add_separators(&option90_dhcpv6_value(option))
 }
 
+#[must_use]
 pub fn option90_dhcpv6_value(option: &Option90) -> String {
     option.value.to_uppercase()
 }

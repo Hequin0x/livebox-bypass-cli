@@ -38,7 +38,7 @@ impl LiveboxClient {
             .post(self.base_url.clone())
             .header(CONTENT_TYPE, SAH_CONTENT_TYPE)
             .header(AUTHORIZATION, HeaderValue::from_static("X-Sah-Login"))
-            .json(&LoginRequest::new(password.to_string()))
+            .json(&LoginRequest::new(password.to_owned()))
             .send()
             .context("failed to send login request")?;
 
@@ -51,7 +51,7 @@ impl LiveboxClient {
             .get("set-cookie")
             .ok_or_else(|| anyhow!("missing Set-Cookie header"))?
             .to_str()?
-            .to_string();
+            .to_owned();
 
         let login_response: LoginResponse =
             response.json().context("invalid login response JSON")?;

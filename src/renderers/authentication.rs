@@ -1,6 +1,7 @@
 use crate::formatters::output_formatter::{Row, Section, format_output};
+use anyhow::Result;
 
-pub fn render_authentication(authentication: &str) -> String {
+pub fn render_authentication(authentication: &str) -> Result<String> {
     let dhcpv6_authentication = authentication.replace(':', "");
 
     let sections = vec![
@@ -8,7 +9,7 @@ pub fn render_authentication(authentication: &str) -> String {
             title: "DHCPv4 Options",
             rows: vec![Row {
                 key: "90",
-                value: authentication.to_string(),
+                value: authentication.to_owned(),
             }],
         },
         Section {
