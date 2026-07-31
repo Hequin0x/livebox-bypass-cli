@@ -2,6 +2,7 @@ use anyhow::Result;
 use owo_colors::OwoColorize;
 use std::fmt::Write;
 use std::io::{IsTerminal, stdout};
+use std::sync::LazyLock;
 
 #[derive(Debug, Clone)]
 pub struct Row<'a> {
@@ -15,8 +16,29 @@ pub struct Section<'a> {
     pub rows: Vec<Row<'a>>,
 }
 
+static USE_COLOR: LazyLock<bool> = LazyLock::new(|| stdout().is_terminal());
+
+impl Row<'_> {
+    fn formatted_key(&self) -> String {
+        if *USE_COLOR {
+            format!("{}", self.key.green().bold())
+        } else {
+            self.key.to_owned()
+        }
+    }
+}
+
+impl Section<'_> {
+    fn formatted_title(&self) -> String {
+        if *USE_COLOR {
+            format!("{}", self.title.blue().bold())
+        } else {
+            self.title.to_owned()
+        }
+    }
+}
+
 pub fn format_output(sections: &[Section<'_>]) -> Result<String> {
-    let use_color = stdout().is_terminal();
     let mut out = String::new();
 
     for (section_index, section) in sections.iter().enumerate() {
@@ -24,20 +46,12 @@ pub fn format_output(sections: &[Section<'_>]) -> Result<String> {
             writeln!(out)?;
         }
 
-        let title = if use_color {
-            format!("{}", section.title.blue().bold())
-        } else {
-            section.title.to_owned()
-        };
+        let title = section.formatted_title();
 
         writeln!(out, "[{title}]")?;
 
         for row in &section.rows {
-            let key = if use_color {
-                format!("{}", row.key.green().bold())
-            } else {
-                row.key.to_owned()
-            };
+            let key = row.formatted_key();
 
             writeln!(out, "{key} -> {}", row.value)?;
         }

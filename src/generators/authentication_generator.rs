@@ -1,5 +1,5 @@
 use anyhow::{Result, bail};
-use rand::TryRng;
+use rand::{TryRng, rngs::SysRng};
 
 use crate::utils::hex::{HexExt, NumHexExt};
 
@@ -39,7 +39,7 @@ pub fn generate_authentication(login: &str, password: &str, salt: Option<&str>) 
 
 fn generate_salt() -> Result<String> {
     let mut bytes = [0u8; 1024];
-    rand::rngs::SysRng.try_fill_bytes(&mut bytes)?;
+    SysRng.try_fill_bytes(&mut bytes)?;
     Ok(compute_digest(&bytes)[0..16].to_string())
 }
 
