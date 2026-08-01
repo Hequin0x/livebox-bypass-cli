@@ -4,6 +4,8 @@ use std::fmt::Write;
 use std::io::{IsTerminal, stdout};
 use std::sync::LazyLock;
 
+static USE_COLOR: LazyLock<bool> = LazyLock::new(|| stdout().is_terminal());
+
 #[derive(Debug, Clone)]
 pub struct Row<'a> {
     pub key: &'a str,
@@ -15,8 +17,6 @@ pub struct Section<'a> {
     pub title: &'a str,
     pub rows: Vec<Row<'a>>,
 }
-
-static USE_COLOR: LazyLock<bool> = LazyLock::new(|| stdout().is_terminal());
 
 impl Row<'_> {
     fn formatted_key(&self) -> String {
@@ -52,7 +52,6 @@ pub fn format_output(sections: &[Section<'_>]) -> Result<String> {
 
         for row in &section.rows {
             let key = row.formatted_key();
-
             writeln!(out, "{key} -> {}", row.value)?;
         }
     }
