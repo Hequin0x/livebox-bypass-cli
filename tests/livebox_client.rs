@@ -1,4 +1,5 @@
 use livebox_bypass_cli::api::livebox_client::{AuthSession, LiveboxClient};
+use livebox_bypass_cli::api::requests::GetMibs;
 use mockito::Server;
 use url::Url;
 
@@ -68,7 +69,7 @@ fn get_mibs_parses_response() {
         cookie: "session=abc123".into(),
     };
 
-    let mibs = client.get_mibs(&session).unwrap();
+    let mibs = client.call(&session, GetMibs).unwrap();
 
     assert_eq!(mibs.status.dhcp.dhcp_data.priority_mark, 6);
     assert_eq!(mibs.status.vlan.gvlan_multi.vlan_id, 832);

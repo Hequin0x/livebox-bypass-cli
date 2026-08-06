@@ -1,11 +1,11 @@
 use std::time::Duration;
 
-use anyhow::{Context, Result, anyhow, bail};
+use anyhow::{Context, Result, anyhow};
 use reqwest::blocking::Client;
 use reqwest::header::{AUTHORIZATION, CONTENT_TYPE, COOKIE, HeaderValue};
 use url::Url;
 
-use crate::api::models::{LoginRequest, LoginResponse, MibsRequest, MibsResponse};
+use crate::api::requests::{ApiRequest, ApiRequestSpec, Login};
 
 const SAH_CONTENT_TYPE: &str = "application/x-sah-ws-4-call+json";
 
@@ -33,18 +33,17 @@ impl LiveboxClient {
     }
 
     pub fn login(&self, password: &str) -> Result<AuthSession> {
+        let request = ApiRequest::from(Login::new(password.to_owned()));
+
         let response = self
             .http
             .post(self.base_url.clone())
             .header(CONTENT_TYPE, SAH_CONTENT_TYPE)
             .header(AUTHORIZATION, HeaderValue::from_static("X-Sah-Login"))
-            .json(&LoginRequest::new(password.to_owned()))
-            .send()
-            .context("failed to send login request")?;
-
-        if !response.status().is_success() {
-            bail!("login failed with status {}", response.status());
-        }
+            .json(&request)
+            .send()?
+            .error_for_status()
+            .context("login request failed")?;
 
         let cookie = response
             .headers()
@@ -53,8 +52,9 @@ impl LiveboxClient {
             .to_str()?
             .to_owned();
 
-        let login_response: LoginResponse =
-            response.json().context("invalid login response JSON")?;
+        let login_response = response
+            .json::<<Login as ApiRequestSpec>::Response>()
+            .context("invalid login response JSON")?;
 
         Ok(AuthSession {
             context_id: login_response.data.context_id,
@@ -62,21 +62,22 @@ impl LiveboxClient {
         })
     }
 
-    pub fn get_mibs(&self, session: &AuthSession) -> Result<MibsResponse> {
-        let response = self
-            .http
+    pub fn call<T>(&self, session: &AuthSession, spec: T) -> Result<T::Response>
+    where
+        T: ApiRequestSpec,
+    {
+        let request = ApiRequest::from(spec);
+
+        self.http
             .post(self.base_url.clone())
             .header(CONTENT_TYPE, SAH_CONTENT_TYPE)
             .header("X-Context", &session.context_id)
             .header(COOKIE, &session.cookie)
-            .json(&MibsRequest::default())
-            .send()
-            .context("failed to send MIBs request")?;
-
-        if !response.status().is_success() {
-            bail!("getMIBs failed with status {}", response.status());
-        }
-
-        response.json().context("invalid MIBs response JSON")
+            .json(&request)
+            .send()?
+            .error_for_status()
+            .with_context(|| format!("{}/{} request failed", T::SERVICE, T::METHOD))?
+            .json()
+            .with_context(|| format!("invalid {}/{} response JSON", T::SERVICE, T::METHOD))
     }
 }
