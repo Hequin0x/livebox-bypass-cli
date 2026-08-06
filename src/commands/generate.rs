@@ -1,5 +1,4 @@
 use anyhow::Result;
-use dialoguer::Password;
 
 use crate::api::livebox_client::LiveboxClient;
 use crate::api::requests::GetMibs;
@@ -8,6 +7,7 @@ use crate::cli::GenerateCommands;
 use crate::config::Config;
 use crate::generators::authentication_generator::generate_authentication;
 use crate::renderers::{render_authentication, render_dhcp, render_gpon};
+use crate::utils::password::resolve_password;
 
 pub fn run_generate(command: GenerateCommands, config: &Config) -> Result<()> {
     match command {
@@ -43,11 +43,4 @@ where
 
     print!("{}", render(&mibs)?);
     Ok(())
-}
-
-fn resolve_password(password: Option<String>, prompt: &str) -> Result<String> {
-    match password {
-        Some(value) if !value.is_empty() => Ok(value),
-        Some(_) | None => Ok(Password::new().with_prompt(prompt).interact()?),
-    }
 }

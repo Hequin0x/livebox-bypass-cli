@@ -37,7 +37,7 @@ impl LiveboxClient {
 
         let response = self
             .http
-            .post(self.base_url.clone())
+            .post(self.base_url.as_str())
             .header(CONTENT_TYPE, SAH_CONTENT_TYPE)
             .header(AUTHORIZATION, HeaderValue::from_static("X-Sah-Login"))
             .json(&request)
@@ -69,7 +69,7 @@ impl LiveboxClient {
         let request = ApiRequest::from(spec);
 
         self.http
-            .post(self.base_url.clone())
+            .post(self.base_url.as_str())
             .header(CONTENT_TYPE, SAH_CONTENT_TYPE)
             .header("X-Context", &session.context_id)
             .header(COOKIE, &session.cookie)
