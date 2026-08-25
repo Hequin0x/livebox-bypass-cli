@@ -40,6 +40,7 @@ pub fn generate_authentication(login: &str, password: &str, salt: Option<&str>) 
 fn generate_salt() -> Result<String> {
     let mut bytes = [0u8; 1024];
     SysRng.try_fill_bytes(&mut bytes)?;
+
     Ok(compute_digest(&bytes)[0..16].to_string())
 }
 

@@ -42,5 +42,6 @@ where
     let mibs = client.call(&session, GetMibs)?;
 
     print!("{}", render(&mibs)?);
+
     Ok(())
 }
