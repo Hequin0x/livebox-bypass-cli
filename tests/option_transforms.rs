@@ -1,4 +1,6 @@
-use livebox_bypass_cli::api::models::{Authentication, ClientIdentifier, UserClass, VendorClass};
+use livebox_bypass_cli::api::responses::{
+    Authentication, ClientIdentifier, UserClass, VendorClass,
+};
 
 #[test]
 fn option_transforms_produce_correct_values() {

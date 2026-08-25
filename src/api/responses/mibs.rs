@@ -1,67 +1,6 @@
 use crate::utils::hex::{HexExt, NumHexExt};
 use anyhow::Result;
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Serialize)]
-pub struct LoginRequest {
-    pub service: &'static str,
-    pub method: &'static str,
-    pub parameters: LoginParameters,
-}
-
-#[derive(Debug, Serialize)]
-pub struct LoginParameters {
-    #[serde(rename = "applicationName")]
-    pub application_name: &'static str,
-    pub username: &'static str,
-    pub password: String,
-}
-
-impl LoginRequest {
-    #[must_use]
-    pub const fn new(password: String) -> Self {
-        Self {
-            service: "sah.Device.Information",
-            method: "createContext",
-            parameters: LoginParameters {
-                application_name: "webui",
-                username: "admin",
-                password,
-            },
-        }
-    }
-}
-
-#[derive(Debug, Serialize)]
-pub struct MibsRequest {
-    pub service: &'static str,
-    pub method: &'static str,
-    pub parameters: EmptyParameters,
-}
-
-#[derive(Debug, Default, Serialize)]
-pub struct EmptyParameters {}
-
-impl Default for MibsRequest {
-    fn default() -> Self {
-        Self {
-            service: "NeMo.Intf.data",
-            method: "getMIBs",
-            parameters: EmptyParameters::default(),
-        }
-    }
-}
-
-#[derive(Debug, Deserialize)]
-pub struct LoginResponse {
-    pub data: LoginData,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct LoginData {
-    #[serde(rename = "contextID")]
-    pub context_id: String,
-}
+use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct MibsResponse {
